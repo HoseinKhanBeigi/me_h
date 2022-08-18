@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { CursorFx } from "./mouseCursor";
 import { ImageComponent } from "./slideFigure";
-import { computeTimeLine } from "./computeTimeLine";
+import { toggleSlide } from "./toggleSlide";
 import { items } from "./items";
 import { computeIndex } from "../../types"
 import "../../app.scss";
@@ -56,7 +56,7 @@ function SlideMotion() {
             setIsAnimating(false);
         };
 
-        computeTimeLine(
+        toggleSlide(
             upcomingSlide,
             currentSlide,
             Completed,
