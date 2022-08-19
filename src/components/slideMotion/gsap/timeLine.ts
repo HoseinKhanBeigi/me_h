@@ -11,5 +11,6 @@ export const timeLine = ({ start, complete }: TimeLineProp) => {
       onComplete: () => complete(),
     })
     .add("begin");
+
   return tl;
 };

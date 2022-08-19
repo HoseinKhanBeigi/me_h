@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { CursorFx } from "./mouseCursor";
 import { ImageComponent } from "./slideFigure";
 import { toggleSlide } from "./toggleSlide";
-import { items } from "./items";
+import { items } from "../../utils/items";
 import { computeIndex } from "../../types"
 import "../../app.scss";
 
@@ -52,14 +52,14 @@ function SlideMotion() {
 
         const currentSlide = computeSlides(Index.current.previousIndex);
         const upcomingSlide = computeSlides(Index.current.currentIndex);
-        const Completed = () => {
+        const completedAnimation = () => {
             setIsAnimating(false);
         };
 
         toggleSlide(
             upcomingSlide,
             currentSlide,
-            Completed,
+            completedAnimation,
             slideshow.current,
             Index.current.previousIndex,
             Index.current.currentIndex,

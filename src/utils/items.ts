@@ -1,4 +1,4 @@
-import { layouts } from "../../types";
+import { layouts } from "../types";
 export const items: any[] = [
   {
     numberOfLayout: "1",

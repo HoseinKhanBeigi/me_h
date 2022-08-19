@@ -1,23 +1,12 @@
-export const slideFigures = (
-  upcomingSlide: any,
+import { animationSettings, sortedslide } from "../../../utils";
+
+export const horizontalSlide = (
   currentSlide: any,
-  dir: string,
-  animationSettings: any,
-  tl: any
+  upcomingSlide: any,
+  tl: any,
+  dir: string
 ) => {
-  const upcomingSlideFigures =
-    dir === "right"
-      ? upcomingSlide.sort(
-          (a: any, b: any) =>
-            a.parentElement.dataset.sort - b.parentElement.dataset.sort
-        )
-      : upcomingSlide
-          .slice()
-          .sort(
-            (a: any, b: any) =>
-              a.parentElement.dataset.sort - b.parentElement.dataset.sort
-          )
-          .reverse();
+  const upcomingSlideFigures = sortedslide(upcomingSlide, dir);
   upcomingSlideFigures.forEach((figure: any, pos: any) => {
     tl.to(
       figure.parentElement,
@@ -46,20 +35,7 @@ export const slideFigures = (
         )
     );
   });
-
-  const currentSlideFigures =
-    dir === "right"
-      ? currentSlide.sort(
-          (a: any, b: any) =>
-            a.parentElement.dataset.sort - b.parentElement.dataset.sort
-        )
-      : currentSlide
-          .slice()
-          .sort(
-            (a: any, b: any) =>
-              a.parentElement.dataset.sort - b.parentElement.dataset.sort
-          )
-          .reverse();
+  const currentSlideFigures = sortedslide(currentSlide, dir);
   currentSlideFigures.forEach((figure: any, pos: any) => {
     tl.to(
       figure.parentElement,
@@ -81,3 +57,7 @@ export const slideFigures = (
     );
   });
 };
+
+class x {
+  constructor() {}
+}

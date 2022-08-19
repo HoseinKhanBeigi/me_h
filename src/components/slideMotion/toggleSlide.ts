@@ -1,50 +1,52 @@
 import { gsap } from "gsap";
-import { slideFigures } from "./slideFigures";
-import { timeLine } from "./computeTimeLine";
+import { timeLine } from "./gsap/timeLine";
+import { animationSettings } from "../../utils";
+import { horizontalSlide } from "./gsap/horizontalSlide";
 export const toggleSlide = (
-  upcomingSlide: any,
-  currentSlide: any,
-  Completed: () => void,
-  parenSlide: any,
+  upcomingSlide: Array<any>,
+  currentSlide: Array<any>,
+  completedAnimation: () => void,
+  slideShow: any,
   currentIndex: number,
   upcomingIndex: number,
-  dir: any
+  dir: string
 ) => {
-  const animationSettings = {
-    duration: 0.8,
-    staggerFactor: 0.13,
+  const setCurrent = () => {
+    toggleCurrent(true, upcomingIndex);
+  };
+  const unsetCurrent = () => {
+    toggleCurrent(false, currentIndex);
+  };
+  const toggleCurrent = (isCurrent: boolean, index: number) => {
+    slideShow
+      .querySelectorAll(".slide")
+      [index].classList[isCurrent ? "add" : "remove"]("slide--current");
   };
 
   const start = () => {
-    currentSlide[0].parentElement.parentNode.style.zIndex = 100;
-    upcomingSlide[0].parentElement.parentNode.style.zIndex = 101;
+    slideShow.querySelectorAll(".slide")[currentIndex].style.zIndex = 100;
+    slideShow.querySelectorAll(".slide")[upcomingIndex].style.zIndex = 101;
   };
 
   const complete = () => {
-    Completed();
+    completedAnimation();
   };
 
   const tl = timeLine({ start, complete });
-  const onCompleteCurrentCallback = () =>
-    parenSlide
-      .querySelectorAll(".slide")
-      [currentIndex].classList.remove("slide--current");
+  const onCompleteCurrent = () => unsetCurrent();
   tl.add(
-    onCompleteCurrentCallback,
+    onCompleteCurrent,
     animationSettings.duration + animationSettings.staggerFactor * (4 - 1)
   );
 
-  const onStartUpcomingCallback = () => {
+  const onStartUpcoming = () => {
     upcomingSlide.forEach((figure: any) => {
       gsap.set(figure.slideElement, {
         x: dir === "right" ? "-101%" : "101%",
       });
     });
-    parenSlide
-      .querySelectorAll(".slide")
-      [upcomingIndex].classList.add("slide--current");
+    setCurrent();
   };
-  tl.add(onStartUpcomingCallback, animationSettings.staggerFactor * (3 - 1));
-
-  slideFigures(upcomingSlide, currentSlide, dir, animationSettings, tl);
+  tl.add(onStartUpcoming, animationSettings.staggerFactor * (3 - 1));
+  horizontalSlide(currentSlide, upcomingSlide, tl, dir);
 };
