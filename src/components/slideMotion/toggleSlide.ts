@@ -2,9 +2,10 @@ import { gsap } from "gsap";
 import { timeLine } from "./gsap/timeLine";
 import { animationSettings } from "../../utils";
 import { horizontalSlide } from "./gsap/horizontalSlide";
+
 export const toggleSlide = (
-  upcomingSlide: Array<any>,
-  currentSlide: Array<any>,
+  upcomingSlide: any,
+  currentSlide: any,
   completedAnimation: () => void,
   slideShow: any,
   currentIndex: number,
@@ -24,8 +25,8 @@ export const toggleSlide = (
   };
 
   const start = () => {
-    slideShow.querySelectorAll(".slide")[currentIndex].style.zIndex = 100;
-    slideShow.querySelectorAll(".slide")[upcomingIndex].style.zIndex = 101;
+    currentSlide.DOM.el.style.zIndex = 100;
+    upcomingSlide.DOM.el.style.zIndex = 101;
   };
 
   const complete = () => {
@@ -40,10 +41,18 @@ export const toggleSlide = (
   );
 
   const onStartUpcoming = () => {
-    upcomingSlide.forEach((figure: any) => {
+    upcomingSlide.figures.forEach((figure: any) => {
       gsap.set(figure.slideElement, {
         x: dir === "right" ? "-101%" : "101%",
       });
+    });
+    gsap.set(upcomingSlide.DOM.text, { opacity: 0 });
+    [...upcomingSlide.DOM.innerTitle].forEach((inner: any, pos: number) => {
+      if (pos === upcomingSlide.innerTitleTotal - 1) {
+        gsap.set([...inner.querySelectorAll("span")], { opacity: 0 });
+      } else {
+        gsap.set(inner, { opacity: 0 });
+      }
     });
     setCurrent();
   };

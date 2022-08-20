@@ -1,4 +1,4 @@
-import { animationSettings, sortedslide } from "../../../utils";
+import { animationSettings, sortedslide, shuffleArray } from "../../../utils";
 
 export const horizontalSlide = (
   currentSlide: any,
@@ -6,7 +6,7 @@ export const horizontalSlide = (
   tl: any,
   dir: string
 ) => {
-  const upcomingSlideFigures = sortedslide(upcomingSlide, dir);
+  const upcomingSlideFigures = sortedslide(upcomingSlide.figures, dir);
   upcomingSlideFigures.forEach((figure: any, pos: any) => {
     tl.to(
       figure.parentElement,
@@ -35,7 +35,47 @@ export const horizontalSlide = (
         )
     );
   });
-  const currentSlideFigures = sortedslide(currentSlide, dir);
+
+  tl.to(
+    upcomingSlide.DOM.text,
+    {
+      duration: animationSettings.duration,
+      ease: "easeOut",
+      opacity: 1,
+    },
+    "begin+=" + animationSettings.staggerFactor * (4 - 1)
+  );
+
+  tl.staggerTo(
+    shuffleArray(upcomingSlide.innerTitleMainLetters),
+    0.05,
+    {
+      ease: "easeOut",
+      opacity: 1,
+    },
+    0.04,
+    "begin+=" + animationSettings.staggerFactor * (4 - 1)
+  );
+  [...upcomingSlide.DOM.innerTitle]
+    .filter((_: any, pos: any) => pos < upcomingSlide.innerTitleTotal - 1)
+    .forEach((inner: any) => {
+      tl.to(
+        inner,
+        0.5,
+        {
+          ease: "easeOut",
+          opacity: 1,
+        },
+        "begin+=" +
+          Number(
+            0.05 +
+              0.04 * (upcomingSlide.titleLettersTotal - 1) +
+              animationSettings.staggerFactor * (4 - 1)
+          )
+      );
+    });
+
+  const currentSlideFigures = sortedslide(currentSlide.figures, dir);
   currentSlideFigures.forEach((figure: any, pos: any) => {
     tl.to(
       figure.parentElement,
@@ -56,8 +96,38 @@ export const horizontalSlide = (
       "begin+=" + pos * 0.13
     );
   });
-};
 
-class x {
-  constructor() {}
-}
+  tl.to(
+    currentSlide.DOM.text,
+    {
+      duration: 0.8,
+      ease: "easeOut",
+      opacity: 0,
+    },
+    "begin+=" + animationSettings.duration * animationSettings.staggerFactor
+  );
+  tl.staggerTo(
+    shuffleArray(currentSlide.innerTitleMainLetters),
+    0.05,
+    {
+      ease: "easeOut",
+      opacity: 0,
+    },
+    0.04,
+    "begin+=" + animationSettings.duration * animationSettings.staggerFactor
+  );
+
+  [...currentSlide.DOM.innerTitle]
+    .filter((_: any, pos: any) => pos < currentSlide.innerTitleTotal - 1)
+    .forEach((inner: any) => {
+      tl.to(
+        inner,
+        0.1,
+        {
+          ease: "easeOut",
+          opacity: 0,
+        },
+        "begin+=" + animationSettings.duration * animationSettings.staggerFactor
+      );
+    });
+};

@@ -14,6 +14,7 @@ export interface layouts {
   textDescription: string;
   slideTitle: string;
   numberOfLayout: string;
+  content: any;
 }
 
 export interface RegularListProps {
@@ -34,4 +35,8 @@ export interface smallImageComponentProps {
 export interface computeIndex {
   previousIndex: number;
   currentIndex: number;
+}
+
+export interface slides {
+  DOM: "";
 }

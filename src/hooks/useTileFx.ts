@@ -19,6 +19,7 @@ export const useTileFx = () => {
     const moving = [...figure.current.children];
     setLenghtOfElement(moving.length);
   }, []);
+
   useEffect(() => {
     requestRef.current = window.requestAnimationFrame(() => render());
     return () => {
@@ -31,44 +32,64 @@ export const useTileFx = () => {
   }));
 
   const render = () => {
-    if (figure.current.classList.contains("slide__figure--main")) {
+    const moving: any = [...figure.current.children];
+
+    const movingTotal = moving.length;
+    mousePos = mousePosRef.current;
+    for (let i = 0; i <= movingTotal - 1; ++i) {
+      let lerpFactor =
+        i < movingTotal - 1 ? options.lerpFactor(i) : options.lerpFactorOuter;
+      translations[i].x = lerp(
+        translations[i].x,
+        lineEq(
+          options.valuesFromTo[1],
+          options.valuesFromTo[0],
+          windowSizeref.width,
+          0,
+          mousePos.x
+        ),
+        lerpFactor
+      );
+      translations[i].y = lerp(
+        translations[i].y,
+        lineEq(
+          options.valuesFromTo[1],
+          options.valuesFromTo[0],
+          windowSizeref.height,
+          0,
+          mousePos.y
+        ),
+        lerpFactor
+      );
+      moving[
+        i
+      ].style.transform = `translateX(${translations[i].x}px) translateY(${translations[i].y}px)`;
+    }
+
+    requestRef.current = requestAnimationFrame(() => render());
+  };
+  const start = () => {
+    requestRef.current = window.requestAnimationFrame(() => render());
+  };
+
+  const stop = () => {
+    if (figure.current) {
       const moving: any = [...figure.current.children];
 
-      const movingTotal = moving.length;
-      mousePos = mousePosRef.current;
-      for (let i = 0; i <= movingTotal - 1; ++i) {
-        let lerpFactor =
-          i < movingTotal - 1 ? options.lerpFactor(i) : options.lerpFactorOuter;
-        translations[i].x = lerp(
-          translations[i].x,
-          lineEq(
-            options.valuesFromTo[1],
-            options.valuesFromTo[0],
-            windowSizeref.width,
-            0,
-            mousePos.x
-          ),
-          lerpFactor
-        );
-        translations[i].y = lerp(
-          translations[i].y,
-          lineEq(
-            options.valuesFromTo[1],
-            options.valuesFromTo[0],
-            windowSizeref.height,
-            0,
-            mousePos.y
-          ),
-          lerpFactor
-        );
-        moving[
-          i
-        ].style.transform = `translateX(${translations[i].x}px) translateY(${translations[i].y}px)`;
+      if (requestRef.current) {
+        window.cancelAnimationFrame(requestRef.current);
+        for (let i = 0; i <= lenghtOfElement - 1; ++i) {
+          translations[i].x = 0;
+          translations[i].y = 0;
+          moving[i].style.transform = `translateX(0px) translateY(0px)`;
+        }
       }
-
-      requestRef.current = requestAnimationFrame(() => render());
     }
   };
 
-  return figure;
+  return {
+    stop,
+    start,
+    figure,
+  };
 };
