@@ -1,42 +1,23 @@
-import { createAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../store/store";
+import { items } from "../../utils/items";
 
-interface DOM {
-  el: any;
-}
-
-interface FigureState {
-  DOM: DOM;
-}
-
-const initialState: FigureState = {
-  DOM: {
-    el: null,
-  },
+const initialState = {
+  items,
 };
 
-export const Figure = createSlice({
+export const Slides = createSlice({
   name: "figure",
   initialState,
   reducers: {
-    initialFigureConstructor: (state, action: PayloadAction<any>) => {
-      console.log(action.payload);
-
-      state.DOM.el = action.payload;
+    slideList: (state) => {
+      state.items.map((e) => e);
     },
-    getFigures: (state) => {
-      state.DOM.el = state.DOM.el;
-    },
-    decrement: (state) => {
-      // state.value -= 1;
-    },
-    incrementByAmount: (state, action: PayloadAction<any>) => {},
   },
 });
 
-// export const { getFigures, decrement, initialFigureConstructor } =
-//   Figure.actions;
-// export const selectCount = (state: RootState) => state.figure.DOM;
-// export default Figure.reducer;
+export const { slideList } = Slides.actions;
+export const selectCount = (state: RootState) => state.Slides;
+export default Slides.reducer;

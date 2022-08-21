@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useRef, useMemo, ReactNode } from "react";
 import { CursorFx } from "./mouseCursor";
 import { toggleSlide } from "./toggleSilde";
-import { items } from "../../utils/items";
+// import { items } from "../../utils/items";
 import { computeIndex } from "../../types";
 import { FigureMain } from "./FigureMain";
 import { FigureBox } from "./FigureBox";
 import { SlideTitle } from "./SlideTitle";
 import { slide } from "./hook/slide";
+import { useSelector, useDispatch } from 'react-redux'
+import { setPreviousIndex, setCurrentIndex } from '../../features/PaginationSlide';
+import { slideList } from '../../features/figures'
 import "../../app.scss";
 
 function SlideMotion() {
@@ -16,13 +19,21 @@ function SlideMotion() {
         previousIndex: 0,
         currentIndex: 0,
     });
-    const layouts: React.MutableRefObject<HTMLDivElement | any> = useRef([]);
+    const slides: React.MutableRefObject<HTMLDivElement | any> = useRef([]);
+    const dispatch = useDispatch();
+    const count = useSelector((state: any) => state);
+
+    const items = useMemo(() => {
+        return count.Slides.items;
+    }, [count.Slides.items])
+
 
     useEffect(() => {
+        dispatch(slideList());
         [...slideshow.current.querySelectorAll(".slide")].forEach((el, i) => {
-            layouts.current.push(slide(el));
+            slides.current.push(slide(el));
         });
-        layouts.current[0].setCurrent();
+        slides.current[0].setCurrent();
     }, []);
 
     const navigate = (dir: string) => {
@@ -40,9 +51,10 @@ function SlideMotion() {
         } else {
             Index.current.currentIndex = Index.current.currentIndex - 1;
         }
-
-        const currentSlide = layouts.current[Index.current.previousIndex];
-        const upcomingSlide = layouts.current[Index.current.currentIndex];
+        dispatch(setPreviousIndex(Index.current.previousIndex))
+        const currentSlide = slides.current[Index.current.previousIndex];
+        const upcomingSlide = slides.current[Index.current.currentIndex];
+        dispatch(setCurrentIndex(Index.current.currentIndex + 1))
         const completedAnimation = () => {
             setIsAnimating(false);
         };
@@ -67,7 +79,7 @@ function SlideMotion() {
                         <h1 className="frame__title">Layer Motion Slideshow</h1>
                         <div className="nav">
                             <div className="nav__counter">
-                                {/* <span>{prevCountRef.current}</span>/<span>{count}</span> */}
+                                <span>{count.PaginationSlide.currentIndex}</span>/<span>{items.length}</span>
                             </div>
                             <div className="nav__arrows">
                                 <button
@@ -93,7 +105,7 @@ function SlideMotion() {
                     </div>
                 </div>
                 <div className="slideshow" ref={slideshow}>
-                    {items.map((item: any, i) => {
+                    {items.map((item: any, i: number) => {
                         return (
                             <div
                                 className={`slide slide--layout-${item.numberOfLayout}`}
