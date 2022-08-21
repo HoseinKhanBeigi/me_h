@@ -40,3 +40,18 @@ export interface computeIndex {
 export interface slides {
   DOM: "";
 }
+
+export interface SlideTitleProps {
+  slideTitle: string;
+  textMeta: string;
+  textDescription: string;
+}
+export interface FigurBoxProps {
+  dataSort: any;
+  url: string;
+}
+
+export interface FigureMainProps {
+  dataSort: any;
+  url: string;
+}

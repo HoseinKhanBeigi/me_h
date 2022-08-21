@@ -45,7 +45,6 @@ export const horizontalSlide = (
     },
     "begin+=" + animationSettings.staggerFactor * (4 - 1)
   );
-
   tl.staggerTo(
     shuffleArray(upcomingSlide.innerTitleMainLetters),
     0.05,

@@ -30,3 +30,29 @@ export const sortedslide = (slide: any, dir: string) => {
 
   return slide;
 };
+
+export const getMousePos = (e: any) => {
+  let posx = 0;
+  let posy = 0;
+  if (!e) e = window.event;
+  if (e.pageX || e.pageY) {
+    posx = e.pageX;
+    posy = e.pageY;
+  } else if (e.clientX || e.clientY) {
+    posx =
+      e.clientX +
+      document.body.scrollLeft +
+      document.documentElement.scrollLeft;
+    posy =
+      e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+  }
+  return { x: posx, y: posy };
+};
+
+export let winsize = { width: window.innerWidth, height: window.innerHeight };
+const calcWinsize = () =>
+  (winsize = { width: window.innerWidth, height: window.innerHeight });
+calcWinsize();
+
+// Recalculate window sizes on resize.
+window.addEventListener("resize", calcWinsize);

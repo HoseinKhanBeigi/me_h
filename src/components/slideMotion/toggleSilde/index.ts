@@ -1,29 +1,14 @@
 import { gsap } from "gsap";
-import { timeLine } from "./gsap/timeLine";
-import { animationSettings } from "../../utils";
-import { horizontalSlide } from "./gsap/horizontalSlide";
+import { timeLine } from "../gsap/timeLine";
+import { animationSettings } from "../../../utils";
+import { horizontalSlide } from "../gsap/horizontalSlide";
 
 export const toggleSlide = (
   upcomingSlide: any,
   currentSlide: any,
   completedAnimation: () => void,
-  slideShow: any,
-  currentIndex: number,
-  upcomingIndex: number,
   dir: string
 ) => {
-  const setCurrent = () => {
-    toggleCurrent(true, upcomingIndex);
-  };
-  const unsetCurrent = () => {
-    toggleCurrent(false, currentIndex);
-  };
-  const toggleCurrent = (isCurrent: boolean, index: number) => {
-    slideShow
-      .querySelectorAll(".slide")
-      [index].classList[isCurrent ? "add" : "remove"]("slide--current");
-  };
-
   const start = () => {
     currentSlide.DOM.el.style.zIndex = 100;
     upcomingSlide.DOM.el.style.zIndex = 101;
@@ -34,7 +19,7 @@ export const toggleSlide = (
   };
 
   const tl = timeLine({ start, complete });
-  const onCompleteCurrent = () => unsetCurrent();
+  const onCompleteCurrent = () => currentSlide.unsetCurrent();
   tl.add(
     onCompleteCurrent,
     animationSettings.duration + animationSettings.staggerFactor * (4 - 1)
@@ -54,7 +39,7 @@ export const toggleSlide = (
         gsap.set(inner, { opacity: 0 });
       }
     });
-    setCurrent();
+    upcomingSlide.setCurrent();
   };
   tl.add(onStartUpcoming, animationSettings.staggerFactor * (3 - 1));
   horizontalSlide(currentSlide, upcomingSlide, tl, dir);

@@ -20,12 +20,12 @@ export const useTileFx = () => {
     setLenghtOfElement(moving.length);
   }, []);
 
-  useEffect(() => {
-    requestRef.current = window.requestAnimationFrame(() => render());
-    return () => {
-      window.cancelAnimationFrame(requestRef.current);
-    };
-  }, [windowSizeref]);
+  // useEffect(() => {
+  //   requestRef.current = window.requestAnimationFrame(() => render());
+  //   return () => {
+  //     window.cancelAnimationFrame(requestRef.current);
+  //   };
+  // }, [windowSizeref]);
   let translations = [...new Array(lenghtOfElement)].map(() => ({
     x: 0,
     y: 0,
@@ -73,17 +73,12 @@ export const useTileFx = () => {
   };
 
   const stop = () => {
-    if (figure.current) {
-      const moving: any = [...figure.current.children];
-
-      if (requestRef.current) {
-        window.cancelAnimationFrame(requestRef.current);
-        for (let i = 0; i <= lenghtOfElement - 1; ++i) {
-          translations[i].x = 0;
-          translations[i].y = 0;
-          moving[i].style.transform = `translateX(0px) translateY(0px)`;
-        }
-      }
+    const moving: any = [...figure.current.children];
+    window.cancelAnimationFrame(requestRef.current);
+    for (let i = 0; i <= lenghtOfElement - 1; ++i) {
+      translations[i].x = 0;
+      translations[i].y = 0;
+      moving[i].style.transform = `translateX(0px) translateY(0px)`;
     }
   };
 

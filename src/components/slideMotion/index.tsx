@@ -1,76 +1,28 @@
 import React, { useEffect, useState, useRef, useMemo, ReactNode } from "react";
 import { CursorFx } from "./mouseCursor";
-import { ImageComponent } from "./slideFigure";
-import { toggleSlide } from "./toggleSlide";
+import { toggleSlide } from "./toggleSilde";
 import { items } from "../../utils/items";
-import { computeIndex } from "../../types"
-import { useTileFx } from "../../hooks/useTileFx";
+import { computeIndex } from "../../types";
+import { FigureMain } from "./FigureMain";
+import { FigureBox } from "./FigureBox";
+import { SlideTitle } from "./SlideTitle";
+import { slide } from "./hook/slide";
 import "../../app.scss";
-const charming = require('charming');
-
-
 
 function SlideMotion() {
     const slideshow: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const [isAnimating, setIsAnimating] = useState<boolean>();
-    const Index: React.MutableRefObject<computeIndex> = useRef({ previousIndex: 0, currentIndex: 0 });
+    const Index: React.MutableRefObject<computeIndex> = useRef({
+        previousIndex: 0,
+        currentIndex: 0,
+    });
     const layouts: React.MutableRefObject<HTMLDivElement | any> = useRef([]);
-    const [count, setCount] = useState(0);
-    const prevCountRef: any = useRef();
+
     useEffect(() => {
-        slideshow.current
-            .querySelectorAll(".slide")[0]
-            .classList.add("slide--current");
-        [...slideshow.current.querySelectorAll(".slide")].forEach((el) => {
-            layouts.current.push(el);
-            const innerTitle = el.querySelector(".slide__title").children;
-            [...innerTitle].forEach((inner: any) => charming(inner));
+        [...slideshow.current.querySelectorAll(".slide")].forEach((el, i) => {
+            layouts.current.push(slide(el));
         });
-    }, []);
-
-    useEffect(() => {
-        prevCountRef.current = count
-    }, [count])
-
-
-    const computeSlides = React.useCallback((index: any) => {
-        let figures: any = [];
-        let slides = {};
-
-        [...layouts.current[index].querySelectorAll(".slide__figure")].forEach((fig) => {
-            figures.push({
-                parentElement: fig,
-                slideElement: fig.children[0],
-            })
-        })
-
-        const title = layouts.current[index].querySelector(".slide__title");
-        const content = layouts.current[index].querySelector(".slide__content");
-        const contentcolor = layouts.current[index].dataset.contentcolor;
-        const innerTitle = layouts.current[index].querySelector(".slide__title").children;
-        const text = layouts.current[index].querySelector(".slide__text");
-        const innerTitleTotal = innerTitle.length;
-        const innerTitleMainLetters = [
-            ...innerTitle[innerTitleTotal - 1].querySelectorAll(
-                "span"
-            ),
-        ];
-        const titleLettersTotal = innerTitleMainLetters.length;
-        slides = {
-            DOM: {
-                el: slideshow.current.children[index],
-                content,
-                innerTitle,
-                title,
-                text,
-            },
-            figures,
-            contentcolor,
-            innerTitleMainLetters,
-            innerTitleTotal,
-            titleLettersTotal,
-        }
-        return slides;
+        layouts.current[0].setCurrent();
     }, []);
 
     const navigate = (dir: string) => {
@@ -82,29 +34,19 @@ function SlideMotion() {
         if (dir === "right") {
             if (Index.current.currentIndex < items.length - 1) {
                 Index.current.currentIndex = Index.current.currentIndex + 1;
-                setCount((count) => count + 1)
             } else {
                 Index.current.currentIndex = 0;
             }
         } else {
             Index.current.currentIndex = Index.current.currentIndex - 1;
         }
-        const currentSlide = computeSlides(Index.current.previousIndex);
-        const upcomingSlide = computeSlides(Index.current.currentIndex);
+
+        const currentSlide = layouts.current[Index.current.previousIndex];
+        const upcomingSlide = layouts.current[Index.current.currentIndex];
         const completedAnimation = () => {
             setIsAnimating(false);
         };
-
-        toggleSlide(
-            upcomingSlide,
-            currentSlide,
-            completedAnimation,
-            slideshow.current,
-            Index.current.previousIndex,
-            Index.current.currentIndex,
-            dir,
-
-        );
+        toggleSlide(upcomingSlide, currentSlide, completedAnimation, dir);
     };
 
     return (
@@ -125,7 +67,7 @@ function SlideMotion() {
                         <h1 className="frame__title">Layer Motion Slideshow</h1>
                         <div className="nav">
                             <div className="nav__counter">
-                                {/* <span>{prewIndex.current}</span>/<span>{currentIndex}</span> */}
+                                {/* <span>{prevCountRef.current}</span>/<span>{count}</span> */}
                             </div>
                             <div className="nav__arrows">
                                 <button
@@ -153,17 +95,24 @@ function SlideMotion() {
                 <div className="slideshow" ref={slideshow}>
                     {items.map((item: any, i) => {
                         return (
-                            <SlideLayout key={i} numberOfLayout={item.numberOfLayout}>
+                            <div
+                                className={`slide slide--layout-${item.numberOfLayout}`}
+                                key={i}
+                            >
                                 <FigureMain
                                     url={item.FigureMainImg.url}
                                     dataSort={item.FigureMainImg.dataSort}
-                                    previousIndex={prevCountRef.current}
-                                    currentIndex={count}
-                                    numberOfLayout={item.numberOfLayout}
                                 />
-                                <FigureBox url={item.imageBoxes.url} dataSort={item.imageBoxes.dataSort} />
-                                <SlideTitle slideTitle={item.slideTitle} textMeta={item.textMeta} textDescription={item.textDescription} />
-                            </SlideLayout>
+                                <FigureBox
+                                    url={item.imageBoxes.url}
+                                    dataSort={item.imageBoxes.dataSort}
+                                />
+                                <SlideTitle
+                                    slideTitle={item.slideTitle}
+                                    textMeta={item.textMeta}
+                                    textDescription={item.textDescription}
+                                />
+                            </div>
                         );
                     })}
                 </div>
@@ -174,103 +123,3 @@ function SlideMotion() {
 }
 
 export default React.memo(SlideMotion);
-
-interface props {
-    children: ReactNode,
-    numberOfLayout: string
-}
-
-const SlideLayout: React.FC<props> = ({ children, numberOfLayout }) => {
-    return <div className={`slide slide--layout-${numberOfLayout}`}>{children}</div>
-}
-
-
-interface FigureMainProps {
-    dataSort: any,
-    url: string,
-    previousIndex: number,
-    currentIndex: number,
-    numberOfLayout: number
-}
-
-const FigureMain: React.FC<FigureMainProps> = ({ dataSort, url, previousIndex, currentIndex, numberOfLayout }) => {
-    const tileFX = useTileFx();
-    return (
-        <div className={`slide__figure slide__figure--main`} data-sort={dataSort}>
-            <div className="slide__figure-inner" ref={tileFX.figure}>
-                <div
-                    className="slide__figure-img"
-                    style={{ backgroundImage: `url(${url})` }}
-                ></div>
-                <div
-                    className="slide__figure-img"
-                    style={{ backgroundImage: `url(${url})` }}
-                ></div>
-                <div
-                    className="slide__figure-img"
-                    style={{ backgroundImage: `url(${url})` }}
-                ></div>
-                <div
-                    className="slide__figure-img"
-                    style={{ backgroundImage: `url(${url})` }}
-                ></div>
-            </div>
-        </div>
-    )
-}
-interface FigurBoxProps {
-    dataSort: any,
-    url: string
-}
-
-const FigureBox: React.FC<FigurBoxProps> = ({ url, dataSort }) => {
-    return (
-        <>
-            <div className="slide__figure slide__figure--box" data-sort={dataSort}>
-                <div className="slide__figure-img" style={{ backgroundImage: `url(${url})` }}></div>
-            </div>
-            <div className="slide__figure slide__figure--box" data-sort={dataSort}>
-                <div className="slide__figure-img" style={{ backgroundImage: `url(${url})` }}></div>
-            </div>
-            <div className="slide__figure slide__figure--box" data-sort={dataSort}>
-                <div className="slide__figure-img" style={{ backgroundImage: `url(${url})` }}></div>
-            </div>
-        </>
-    )
-}
-
-interface SlideTitleProps {
-    slideTitle: string,
-    textMeta: string,
-    textDescription: string
-}
-
-const SlideTitle: React.FC<SlideTitleProps> = ({ slideTitle, textMeta, textDescription }) => {
-    return (
-        <>
-            <h2 className="slide__title">
-                <span className="slide__title-inner">{slideTitle}</span>
-                <span className="slide__title-inner">{slideTitle}</span>
-                <span className="slide__title-inner">{slideTitle}</span>
-            </h2>
-            <div className="slide__text slide__text--right">
-                <p className="slide__text-meta">{textMeta}</p>
-                <p className="slide__text-description">{textDescription}</p>
-                <a className="slide__text-link" data-hover href="#">+</a>
-            </div>
-        </>
-    )
-}
-
-
-
-{/* <ImageComponent
-    key={i}
-    slideTitle={item.slideTitle}
-    textMeta={item.textMeta}
-    textDescription={item.textDescription}
-    imageBoxes={item.imageBoxes}
-    FigureMainImg={item.FigureMainImg}
-    numberOfLayout={item.numberOfLayout}
-    content={item.content}
-/> */}

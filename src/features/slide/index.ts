@@ -27,100 +27,93 @@ type Figure = {
 };
 
 interface initialState {
-  Figure: Figure;
-  slideShow: slideShow;
-  slide: slide;
+  current: {};
+  prev: {};
+  layouts: any[];
 }
 
 const initialState: initialState = {
-  Figure: {
-    DOM: {
-      el: "",
-      img: "",
-      slideEl: "",
-      isMain: false,
-    },
-  },
-  slide: {
-    getSlide: (value: any) => {
-      initialState.slide.DOM.el = value;
-      return {
-        DOM: initialState.slide.DOM,
-        figures: [],
-        figuresTotal: 0,
-        setCurrent: () => {
-          initialState.slide.toggleCurrent(true);
-        },
-        unsetCurrent: () => {
-          initialState.slide.toggleCurrent(false);
-        },
-        toggleCurrent: (isCurrent: boolean) => {
-          initialState.slide.DOM.el.classList[isCurrent ? "add" : "remove"](
-            "slide--current"
-          );
-        },
-      };
-    },
-    DOM: {
-      el: "",
-    },
-    figures: [],
-    figuresTotal: 0,
-    setCurrent: () => {
-      initialState.slide.toggleCurrent(true);
-    },
-    unsetCurrent: () => {
-      initialState.slide.toggleCurrent(false);
-    },
-    toggleCurrent: (isCurrent: boolean) => {
-      initialState.slide.DOM.el.classList[isCurrent ? "add" : "remove"](
-        "slide--current"
-      );
-    },
-  },
-  slideShow: {
-    DOM: {
-      el: "",
-    },
-    slides: [],
-    current: 0,
-    slidesTotal: 0,
-  },
+  current: {},
+  prev: {},
+  layouts: [],
 };
 
 export const SlideMotion = createSlice({
   name: "slideMotion",
   initialState,
   reducers: {
-    getFigureDOM: (state, action) => {
-      state.Figure.DOM.el = action.payload;
-      state.Figure.DOM.img =
-        state.Figure.DOM.el.querySelector(".slide__figure-img");
-      state.Figure.DOM.slideEl = state.Figure.DOM.img;
-      if (state.Figure.DOM.el.classList.contains("slide__figure--main")) {
-        state.Figure.DOM.isMain = true;
-        state.Figure.DOM.slideEl = state.Figure.DOM.el.querySelector(
-          ".slide__figure-inner"
-        );
-      }
+    getSlides: (state, action: PayloadAction<any>) => {
+      state.layouts.push(action.payload);
     },
-    getSlideShow: (state, action) => {
-      state.slideShow.DOM.el = action.payload;
-      [...state.slideShow.DOM.el.querySelectorAll(".slide")].forEach(
-        (slide, i) => {
-          const el = state.slide.DOM.el;
-          state.slideShow.slides.push(state.slide.getSlide(slide));
-        }
-      );
-      console.log(state.slideShow.slides[0]);
+    getCurrentSlide: (state, action: PayloadAction<any>) => {
+      const { type, data } = action.payload;
+      const Figures: any = [];
+      state.layouts.forEach((el, i) => {
+        // const figure = (el: HTMLDivElement | any) => {
+        //   const img = el.querySelector(".slide__figure-img");
+        //   const parentElement = el;
+        //   let slideElement = img;
+        //   let isMain = false;
+        //   let inner = "";
+        //   let tilt = {};
+        //   if (el.classList.contains("slide__figure--main")) {
+        //     isMain = true;
+        //     inner = el.querySelector(".slide__figure-inner");
+        //     slideElement = inner;
+        //   }
 
-      state.slideShow.slidesTotal = state.slideShow.slides.length;
-      state.slideShow.current = 0;
-      state.slideShow.slides[state.slideShow.current].setCurrent();
+        //   return inner
+        //     ? {
+        //         parentElement,
+        //         isMain,
+        //         slideElement,
+        //         inner,
+        //         tilt,
+        //       }
+        //     : { parentElement, isMain, slideElement };
+        // };
+        // Figures.push(figure(el));
+        if (data === i) {
+          const title = el.querySelector(".slide__title");
+          const content = el.querySelector(".slide__content");
+          const contentcolor = el.dataset.contentcolor;
+          const innerTitle = el.querySelector(".slide__title").children;
+          // [...innerTitle].forEach((inner: any) => charming(inner));
+          const text = el.querySelector(".slide__text");
+          const innerTitleTotal = innerTitle.length;
+          const innerTitleMainLetters = [
+            ...innerTitle[innerTitleTotal - 1].children,
+          ];
+          const titleLettersTotal = innerTitleMainLetters.length;
+          if (type === "current") {
+            state.current = {
+              el,
+              title,
+              content,
+              contentcolor,
+              text,
+              innerTitleMainLetters,
+              innerTitleTotal,
+              titleLettersTotal,
+            };
+          } else if (type === "prev") {
+            state.prev = {
+              el,
+              title,
+              content,
+              contentcolor,
+              text,
+              innerTitleMainLetters,
+              innerTitleTotal,
+              titleLettersTotal,
+            };
+          }
+        }
+      });
     },
   },
 });
 
-export const { getFigureDOM, getSlideShow } = SlideMotion.actions;
+export const { getSlides, getCurrentSlide } = SlideMotion.actions;
 export const selectCount = (state: RootState) => state.slideMotion;
 export default SlideMotion.reducer;
