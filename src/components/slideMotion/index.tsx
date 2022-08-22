@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef, useMemo, ReactNode } from "react";
 import { CursorFx } from "./mouseCursor";
 import { toggleSlide } from "./toggleSilde";
-// import { items } from "../../utils/items";
 import { computeIndex } from "../../types";
 import { FigureMain } from "./FigureMain";
 import { FigureBox } from "./FigureBox";
+import { Header } from "./header"
 import { SlideTitle } from "./SlideTitle";
 import { slide } from "./hook/slide";
 import { useSelector, useDispatch } from 'react-redux'
@@ -13,19 +13,19 @@ import { slideList } from '../../features/figures'
 import "../../app.scss";
 
 function SlideMotion() {
+    const dispatch = useDispatch();
+    const { PaginationSlide, Slides } = useSelector((state: any) => state);
     const slideshow: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const [isAnimating, setIsAnimating] = useState<boolean>();
+    const slides: React.MutableRefObject<HTMLDivElement | any> = useRef([]);
     const Index: React.MutableRefObject<computeIndex> = useRef({
         previousIndex: 0,
         currentIndex: 0,
     });
-    const slides: React.MutableRefObject<HTMLDivElement | any> = useRef([]);
-    const dispatch = useDispatch();
-    const count = useSelector((state: any) => state);
 
     const items = useMemo(() => {
-        return count.Slides.items;
-    }, [count.Slides.items])
+        return Slides.items;
+    }, [Slides.items])
 
 
     useEffect(() => {
@@ -74,36 +74,7 @@ function SlideMotion() {
                 </symbol>
             </svg>
             <main>
-                <div className="frame">
-                    <div className="frame__title-wrap">
-                        <h1 className="frame__title">Layer Motion Slideshow</h1>
-                        <div className="nav">
-                            <div className="nav__counter">
-                                <span>{count.PaginationSlide.currentIndex}</span>/<span>{items.length}</span>
-                            </div>
-                            <div className="nav__arrows">
-                                <button
-                                    className="nav__arrow nav__arrow--prev"
-                                    data-hover
-                                    onClick={() => navigate("left")}
-                                >
-                                    <svg className="icon icon--rotated icon--nav">
-                                        <use xlinkHref="#icon-nav"></use>
-                                    </svg>
-                                </button>
-                                <button
-                                    className="nav__arrow nav__arrow--next"
-                                    data-hover
-                                    onClick={() => navigate("right")}
-                                >
-                                    <svg className="icon icon--nav">
-                                        <use xlinkHref="#icon-nav"></use>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Header navigate={navigate} currentIndex={PaginationSlide.currentIndex} length={items.length} />
                 <div className="slideshow" ref={slideshow}>
                     {items.map((item: any, i: number) => {
                         return (

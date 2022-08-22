@@ -55,3 +55,9 @@ export interface FigureMainProps {
   dataSort: any;
   url: string;
 }
+
+export interface HeaderInterface {
+  navigate: (value: string) => void;
+  currentIndex: number;
+  length: number;
+}
