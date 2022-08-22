@@ -55,7 +55,6 @@ export const verticalMotion = (
   const currentSlideFigures = sortedslide(currentSlide.figures, dir, "down");
 
   const figureMain = currentSlideFigures.find((figure: any) => figure.isMain);
-  console.log(figureMain);
 
   const extraInnerTitleElems = [...currentSlide.DOM.innerTitle].filter(
     (_: any, pos: number) => pos < currentSlide.innerTitleTotal - 1
