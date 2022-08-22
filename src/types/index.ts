@@ -45,6 +45,7 @@ export interface SlideTitleProps {
   slideTitle: string;
   textMeta: string;
   textDescription: string;
+  showContent: (val: string) => void;
 }
 export interface FigurBoxProps {
   dataSort: any;
@@ -60,4 +61,20 @@ export interface HeaderInterface {
   navigate: (value: string) => void;
   currentIndex: number;
   length: number;
+}
+
+export interface ContentProps {
+  hideContent: (val: string) => void;
+  p1: string;
+  p2: string;
+  p3: string;
+}
+
+export interface Times {
+  switchtime: number;
+  slideFigures: (val: number) => number;
+  texts: number;
+  textsExtraTitles: number;
+  contentExtraTitles: number;
+  content: number;
 }

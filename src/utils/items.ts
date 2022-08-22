@@ -2,6 +2,7 @@ import { layouts } from "../types";
 export const items: any[] = [
   {
     numberOfLayout: "1",
+    dataContentcolor: "#e88655",
     imageBoxes: [
       { url: "./img/3.jpg", dataSort: "2", shape: "box" },
       { url: "./img/2.jpg", dataSort: "4", shape: "box" },
@@ -20,6 +21,7 @@ export const items: any[] = [
   },
   {
     numberOfLayout: "2",
+    dataContentcolor: "#7dd2dc",
     imageBoxes: [
       { url: "./img/6.jpg", dataSort: "2", shape: "box" },
       { url: "./img/7.jpg", dataSort: "3", shape: "box" },
@@ -38,6 +40,7 @@ export const items: any[] = [
   },
   {
     numberOfLayout: "3",
+    dataContentcolor: "#dc9d7f",
     imageBoxes: [
       { url: "./img/14.jpg", dataSort: "2", shape: "box" },
       { url: "./img/15.jpg", dataSort: "3", shape: "box" },
@@ -56,6 +59,7 @@ export const items: any[] = [
   },
   {
     numberOfLayout: "4",
+    dataContentcolor: "#e4d0a2",
     imageBoxes: [
       { url: "./img/10.jpg", dataSort: "3", shape: "box" },
       { url: "./img/11.jpg", dataSort: "2", shape: "box" },
@@ -74,6 +78,7 @@ export const items: any[] = [
   },
   {
     numberOfLayout: "5",
+    dataContentcolor: "#e4d0a2",
     imageBoxes: [
       { url: "./img/10.jpg", dataSort: "3", shape: "box" },
       { url: "./img/11.jpg", dataSort: "2", shape: "box" },
@@ -92,6 +97,7 @@ export const items: any[] = [
   },
   {
     numberOfLayout: "6",
+    dataContentcolor: "#e4d0a2",
     imageBoxes: [
       { url: "./img/10.jpg", dataSort: "3", shape: "box" },
       { url: "./img/11.jpg", dataSort: "2", shape: "box" },

@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useRef, useMemo, ReactNode } from "react";
 import { CursorFx } from "./mouseCursor";
 import { toggleSlide } from "./toggleSilde";
+import { toggleContent } from "./toggleContent"
 import { computeIndex } from "../../types";
 import { FigureMain } from "./FigureMain";
 import { FigureBox } from "./FigureBox";
+import { Content } from "./content"
 import { Header } from "./header"
 import { SlideTitle } from "./SlideTitle";
 import { slide } from "./hook/slide";
 import { useSelector, useDispatch } from 'react-redux'
-import { setPreviousIndex, setCurrentIndex } from '../../features/PaginationSlide';
+import { setCurrentIndex } from '../../features/PaginationSlide';
 import { slideList } from '../../features/figures'
 import "../../app.scss";
 
@@ -40,7 +42,7 @@ function SlideMotion() {
         if (isAnimating) {
             return;
         }
-        setIsAnimating(false);
+        setIsAnimating(true);
         Index.current.previousIndex = Index.current.currentIndex;
         if (dir === "right") {
             if (Index.current.currentIndex < items.length - 1) {
@@ -51,7 +53,6 @@ function SlideMotion() {
         } else {
             Index.current.currentIndex = Index.current.currentIndex - 1;
         }
-        dispatch(setPreviousIndex(Index.current.previousIndex))
         const currentSlide = slides.current[Index.current.previousIndex];
         const upcomingSlide = slides.current[Index.current.currentIndex];
         dispatch(setCurrentIndex(Index.current.currentIndex + 1))
@@ -60,6 +61,17 @@ function SlideMotion() {
         };
         toggleSlide(upcomingSlide, currentSlide, completedAnimation, dir);
     };
+    const completedAnimation = () => {
+        setIsAnimating(false);
+    };
+    const handleContent = (state: string) => {
+        if (isAnimating) {
+            return;
+        }
+        setIsAnimating(true);
+        const currentSlide = slides.current[Index.current.currentIndex];
+        toggleContent(state, currentSlide, completedAnimation)
+    }
 
     return (
         <>
@@ -81,6 +93,7 @@ function SlideMotion() {
                             <div
                                 className={`slide slide--layout-${item.numberOfLayout}`}
                                 key={i}
+                                data-contentcolor={item.dataContentcolor}
                             >
                                 <FigureMain
                                     url={item.FigureMainImg.url}
@@ -94,7 +107,9 @@ function SlideMotion() {
                                     slideTitle={item.slideTitle}
                                     textMeta={item.textMeta}
                                     textDescription={item.textDescription}
+                                    showContent={handleContent}
                                 />
+                                <Content p1={item.content.p1} p2={item.content.p2} p3={item.content.p3} hideContent={handleContent} />
                             </div>
                         );
                     })}

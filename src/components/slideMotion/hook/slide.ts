@@ -18,6 +18,7 @@ export function slide(el: HTMLDivElement | any) {
   const innerTitleMainLetters = [...innerTitle[innerTitleTotal - 1].children];
   const titleLettersTotal = innerTitleMainLetters.length;
   const textTilt = new TiltFx(title);
+  const backFromContentCtrl = el.querySelector(".slide__back");
 
   const setCurrent = () => {
     toggleCurrent(true);
@@ -39,6 +40,7 @@ export function slide(el: HTMLDivElement | any) {
       el,
       content,
       innerTitle,
+      backFromContentCtrl,
       title,
       text,
     },

@@ -6,7 +6,7 @@ export const horizontalSlide = (
   tl: any,
   dir: string
 ) => {
-  const upcomingSlideFigures = sortedslide(upcomingSlide.figures, dir);
+  const upcomingSlideFigures = sortedslide(upcomingSlide.figures, dir, "right");
   upcomingSlideFigures.forEach((figure: any, pos: any) => {
     tl.to(
       figure.parentElement,
@@ -74,7 +74,7 @@ export const horizontalSlide = (
       );
     });
 
-  const currentSlideFigures = sortedslide(currentSlide.figures, dir);
+  const currentSlideFigures = sortedslide(currentSlide.figures, dir, "right");
   currentSlideFigures.forEach((figure: any, pos: any) => {
     tl.to(
       figure.parentElement,

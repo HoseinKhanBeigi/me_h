@@ -14,8 +14,8 @@ export const animationSettings = {
   staggerFactor: 0.13,
 };
 
-export const sortedslide = (slide: any, dir: string) => {
-  dir === "right"
+export const sortedslide = (slide: any, dir: string, dirction: string) => {
+  dir === dirction
     ? slide.sort(
         (a: any, b: any) =>
           a.parentElement.dataset.sort - b.parentElement.dataset.sort
