@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useRef, useMemo, ReactNode } from "react";
 import { CursorFx } from "./mouseCursor";
 import { toggleSlide } from "./toggleSilde";
-import { toggleContent } from "./toggleContent"
+import { toggleContent } from "./toggleContent";
 import { computeIndex } from "../../types";
 import { FigureMain } from "./FigureMain";
 import { FigureBox } from "./FigureBox";
-import { Content } from "./content"
-import { Header } from "./header"
+import { Content } from "./content";
+import { Header } from "./header";
 import { SlideTitle } from "./SlideTitle";
 import { slide } from "./hook/slide";
-import { useSelector, useDispatch } from 'react-redux'
-import { setCurrentIndex } from '../../features/PaginationSlide';
-import { slideList } from '../../features/figures'
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentIndex } from "../../features/PaginationSlide";
+import { slideList } from "../../features/figures";
 import "../../app.scss";
 
 function SlideMotion() {
@@ -19,6 +19,7 @@ function SlideMotion() {
     const { PaginationSlide, Slides } = useSelector((state: any) => state);
     const slideshow: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const [isAnimating, setIsAnimating] = useState<boolean>();
+    const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
     const slides: React.MutableRefObject<HTMLDivElement | any> = useRef([]);
     const Index: React.MutableRefObject<computeIndex> = useRef({
         previousIndex: 0,
@@ -27,8 +28,7 @@ function SlideMotion() {
 
     const items = useMemo(() => {
         return Slides.items;
-    }, [Slides.items])
-
+    }, [Slides.items]);
 
     useEffect(() => {
         dispatch(slideList());
@@ -55,23 +55,29 @@ function SlideMotion() {
         }
         const currentSlide = slides.current[Index.current.previousIndex];
         const upcomingSlide = slides.current[Index.current.currentIndex];
-        dispatch(setCurrentIndex(Index.current.currentIndex + 1))
+        dispatch(setCurrentIndex(Index.current.currentIndex + 1));
         const completedAnimation = () => {
             setIsAnimating(false);
         };
         toggleSlide(upcomingSlide, currentSlide, completedAnimation, dir);
     };
-    const completedAnimation = () => {
+    const completedAnimationContent = (action: string) => {
         setIsAnimating(false);
+        if (action === "hide") {
+            setIsContentOpen(false);
+        }
     };
-    const handleContent = (state: string) => {
+    const handleContent = (action: string) => {
         if (isAnimating) {
             return;
         }
+        if (action === "show") {
+            setIsContentOpen(true);
+        }
         setIsAnimating(true);
         const currentSlide = slides.current[Index.current.currentIndex];
-        toggleContent(state, currentSlide, completedAnimation)
-    }
+        toggleContent(action, currentSlide, completedAnimationContent);
+    };
 
     return (
         <>
@@ -86,7 +92,12 @@ function SlideMotion() {
                 </symbol>
             </svg>
             <main>
-                <Header navigate={navigate} currentIndex={PaginationSlide.currentIndex} length={items.length} />
+                <Header
+                    navigate={navigate}
+                    currentIndex={PaginationSlide.currentIndex}
+                    length={items.length}
+                    isContentOpen={isContentOpen}
+                />
                 <div className="slideshow" ref={slideshow}>
                     {items.map((item: any, i: number) => {
                         return (
@@ -100,8 +111,7 @@ function SlideMotion() {
                                     dataSort={item.FigureMainImg.dataSort}
                                 />
                                 <FigureBox
-                                    url={item.imageBoxes.url}
-                                    dataSort={item.imageBoxes.dataSort}
+                                    imageBoxes={item.imageBoxes}
                                 />
                                 <SlideTitle
                                     slideTitle={item.slideTitle}
@@ -109,7 +119,12 @@ function SlideMotion() {
                                     textDescription={item.textDescription}
                                     showContent={handleContent}
                                 />
-                                <Content p1={item.content.p1} p2={item.content.p2} p3={item.content.p3} hideContent={handleContent} />
+                                <Content
+                                    p1={item.content.p1}
+                                    p2={item.content.p2}
+                                    p3={item.content.p3}
+                                    hideContent={handleContent}
+                                />
                             </div>
                         );
                     })}

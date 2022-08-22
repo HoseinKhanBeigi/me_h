@@ -1,6 +1,6 @@
 
 import { HeaderInterface } from "../../../types"
-export const Header: React.FC<HeaderInterface> = ({ navigate, currentIndex, length }) => {
+export const Header: React.FC<HeaderInterface> = ({ navigate, currentIndex, length, isContentOpen }) => {
     return (
         <div className="frame">
             <div className="frame__title-wrap">
@@ -13,6 +13,7 @@ export const Header: React.FC<HeaderInterface> = ({ navigate, currentIndex, leng
                         <button
                             className="nav__arrow nav__arrow--prev"
                             data-hover
+                            disabled={isContentOpen}
                             onClick={() => navigate("left")}
                         >
                             <svg className="icon icon--rotated icon--nav">
@@ -22,6 +23,7 @@ export const Header: React.FC<HeaderInterface> = ({ navigate, currentIndex, leng
                         <button
                             className="nav__arrow nav__arrow--next"
                             data-hover
+                            disabled={isContentOpen}
                             onClick={() => navigate("right")}
                         >
                             <svg className="icon icon--nav">

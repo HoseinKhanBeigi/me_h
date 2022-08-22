@@ -4,14 +4,10 @@ import { verticalMotion } from "./verticalMotion";
 export const toggleContent = (
   action: string,
   currentSlide: any,
-  completedAnimation: () => void
+  completedAnimation: (val: string) => void
 ) => {
   const complete = () => {
-    // if (action === "hide") {
-    //   isContentOpen = false;
-    //   showNavigationCtrls();
-    // }
-    completedAnimation();
+    completedAnimation(action);
   };
   const body = document.body;
   const bodyColor =

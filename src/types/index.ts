@@ -48,8 +48,7 @@ export interface SlideTitleProps {
   showContent: (val: string) => void;
 }
 export interface FigurBoxProps {
-  dataSort: any;
-  url: string;
+  imageBoxes: smallImageComponentProps[];
 }
 
 export interface FigureMainProps {
@@ -61,6 +60,7 @@ export interface HeaderInterface {
   navigate: (value: string) => void;
   currentIndex: number;
   length: number;
+  isContentOpen: boolean;
 }
 
 export interface ContentProps {
