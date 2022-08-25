@@ -11,11 +11,15 @@ import { SlideTitle } from "./SlideTitle";
 import { slide } from "./hook/slide";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentIndex } from "../../features/PaginationSlide";
-import { slideList } from "../../features/figures";
+import { slideList } from "../../features/slice/figureSlice";
+import { fetchPhotos } from "../../features/actions";
+
+import { useAppSelector, useAppDispatch } from "../../hooks/useDispatch";
 import "../../app.scss";
 
 function SlideMotion() {
-    const dispatch = useDispatch();
+
+    const dispatch = useAppDispatch();
     const { PaginationSlide, Slides } = useSelector((state: any) => state);
     const slideshow: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const [isAnimating, setIsAnimating] = useState<boolean>();
@@ -32,11 +36,18 @@ function SlideMotion() {
 
     useEffect(() => {
         dispatch(slideList());
+        dispatch(fetchPhotos(1));
+
         [...slideshow.current.querySelectorAll(".slide")].forEach((el, i) => {
             slides.current.push(slide(el));
         });
+        console.log(slides.current, "slides.current");
+
         slides.current[0].setCurrent();
     }, []);
+
+    const { entities, status, error, clone } = useAppSelector((state) => state.photoSlice);
+
 
     const navigate = (dir: string) => {
         if (isAnimating) {
@@ -56,6 +67,7 @@ function SlideMotion() {
         const currentSlide = slides.current[Index.current.previousIndex];
         const upcomingSlide = slides.current[Index.current.currentIndex];
         dispatch(setCurrentIndex(Index.current.currentIndex + 1));
+        dispatch(fetchPhotos({ page: Index.current.currentIndex + 1 }));
         const completedAnimation = () => {
             setIsAnimating(false);
         };

@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../../store/store";
-import { items } from "../../utils/items";
+import type { RootState } from "../../../store/store";
+import { items } from "../../../utils/items";
 
 const initialState = {
   items,

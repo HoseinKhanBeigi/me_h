@@ -1,10 +1,12 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import PaginationSlide from "../features/PaginationSlide";
-import Slides from "../features/figures";
+import Slides from "../features/slice/figureSlice";
+import photoSlice from "../features/photosSlice";
 
 const rootReducer = combineReducers({
   PaginationSlide,
   Slides,
+  photoSlice,
 });
 export const store = configureStore({
   reducer: rootReducer,

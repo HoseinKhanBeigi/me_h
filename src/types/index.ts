@@ -78,3 +78,12 @@ export interface Times {
   contentExtraTitles: number;
   content: number;
 }
+
+export interface photosState {
+  entities: any[];
+  status: "idle" | "pending" | "succeeded" | "failed";
+  error: any;
+  currentRequestId: any;
+  photos: any[];
+  clone: any;
+}
