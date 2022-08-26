@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef, useMemo, ReactNode } from "react";
 import { CursorFx } from "./mouseCursor";
-import { toggleSlide } from "./toggleSilde";
+import { gsap } from "gsap";
+import { currentSlide } from "./currentSlide";
+import { upComingSlide } from "./upComingSlide"
 import { toggleContent } from "./toggleContent";
 import { computeIndex } from "../../types";
 import { FigureMain } from "./FigureMain";
@@ -10,53 +12,52 @@ import { Header } from "./header";
 import { SlideTitle } from "./SlideTitle";
 import { slide } from "./hook/slide";
 import { useSelector, useDispatch } from "react-redux";
-import { setCurrentIndex } from "../../features/PaginationSlide";
-import { slideList } from "../../features/slice/figureSlice";
-import { fetchPhotos } from "../../features/actions";
-
 import { useAppSelector, useAppDispatch } from "../../hooks/useDispatch";
+import { items2 } from "../../utils/items";
 import "../../app.scss";
 
 function SlideMotion() {
-
     const dispatch = useAppDispatch();
+    const [stateItem, setStateItem] = useState(0);
     const { PaginationSlide, Slides } = useSelector((state: any) => state);
     const slideshow: React.MutableRefObject<HTMLDivElement | any> = useRef();
-    const [isAnimating, setIsAnimating] = useState<boolean>();
     const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
-    const slides: React.MutableRefObject<HTMLDivElement | any> = useRef([]);
+    const slides: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const Index: React.MutableRefObject<computeIndex> = useRef({
         previousIndex: 0,
         currentIndex: 0,
     });
 
-    const items = useMemo(() => {
-        return Slides.items;
-    }, [Slides.items]);
+    const root: React.MutableRefObject<HTMLDivElement | any> = useRef()
+
+    const { entities, status, error, clone } = useAppSelector(
+        (state) => state.photoSlice
+    );
 
     useEffect(() => {
-        dispatch(slideList());
-        dispatch(fetchPhotos(1));
-
+        // dispatch(fetchPhotos(1));
         [...slideshow.current.querySelectorAll(".slide")].forEach((el, i) => {
-            slides.current.push(slide(el));
+            slides.current = slide(el);
         });
-        console.log(slides.current, "slides.current");
-
-        slides.current[0].setCurrent();
     }, []);
 
-    const { entities, status, error, clone } = useAppSelector((state) => state.photoSlice);
 
-
-    const navigate = (dir: string) => {
-        if (isAnimating) {
-            return;
+    const completedAnimationContent = (action: string) => {
+        if (action === "hide") {
+            setIsContentOpen(false);
         }
-        setIsAnimating(true);
-        Index.current.previousIndex = Index.current.currentIndex;
+    };
+    const handleContent = (action: string) => {
+        if (action === "show") {
+            setIsContentOpen(true);
+        }
+        const currentSlide = slides.current;
+        toggleContent(action, currentSlide, completedAnimationContent);
+    };
+
+    const navigation = (dir: string) => {
         if (dir === "right") {
-            if (Index.current.currentIndex < items.length - 1) {
+            if (Index.current.currentIndex < items2.length - 1) {
                 Index.current.currentIndex = Index.current.currentIndex + 1;
             } else {
                 Index.current.currentIndex = 0;
@@ -64,32 +65,20 @@ function SlideMotion() {
         } else {
             Index.current.currentIndex = Index.current.currentIndex - 1;
         }
-        const currentSlide = slides.current[Index.current.previousIndex];
-        const upcomingSlide = slides.current[Index.current.currentIndex];
-        dispatch(setCurrentIndex(Index.current.currentIndex + 1));
-        dispatch(fetchPhotos({ page: Index.current.currentIndex + 1 }));
-        const completedAnimation = () => {
-            setIsAnimating(false);
-        };
-        toggleSlide(upcomingSlide, currentSlide, completedAnimation, dir);
+        computeSlide(dir, Index.current.currentIndex).then(() => upComingSlide(slides.current, dir));
     };
-    const completedAnimationContent = (action: string) => {
-        setIsAnimating(false);
-        if (action === "hide") {
-            setIsContentOpen(false);
-        }
-    };
-    const handleContent = (action: string) => {
-        if (isAnimating) {
-            return;
-        }
-        if (action === "show") {
-            setIsContentOpen(true);
-        }
-        setIsAnimating(true);
-        const currentSlide = slides.current[Index.current.currentIndex];
-        toggleContent(action, currentSlide, completedAnimationContent);
-    };
+
+    useEffect(() => {
+        upComingSlide(slides.current, "right")
+    }, []);
+
+    const computeSlide = (dir: string, index: number) => {
+        return new Promise<void>((resolve) => {
+            currentSlide(slides.current, dir, resolve, setStateItem, index)
+        })
+    }
+
+
 
     return (
         <>
@@ -105,41 +94,35 @@ function SlideMotion() {
             </svg>
             <main>
                 <Header
-                    navigate={navigate}
+                    navigate={navigation}
                     currentIndex={PaginationSlide.currentIndex}
-                    length={items.length}
+                    length={1}
                     isContentOpen={isContentOpen}
                 />
                 <div className="slideshow" ref={slideshow}>
-                    {items.map((item: any, i: number) => {
-                        return (
-                            <div
-                                className={`slide slide--layout-${item.numberOfLayout}`}
-                                key={i}
-                                data-contentcolor={item.dataContentcolor}
-                            >
-                                <FigureMain
-                                    url={item.FigureMainImg.url}
-                                    dataSort={item.FigureMainImg.dataSort}
-                                />
-                                <FigureBox
-                                    imageBoxes={item.imageBoxes}
-                                />
-                                <SlideTitle
-                                    slideTitle={item.slideTitle}
-                                    textMeta={item.textMeta}
-                                    textDescription={item.textDescription}
-                                    showContent={handleContent}
-                                />
-                                <Content
-                                    p1={item.content.p1}
-                                    p2={item.content.p2}
-                                    p3={item.content.p3}
-                                    hideContent={handleContent}
-                                />
-                            </div>
-                        );
-                    })}
+                    <div
+                        className={`slide slide--layout-${items2[stateItem].numberOfLayout}`}
+                        data-contentcolor={items2[stateItem].dataContentcolor}
+                        ref={root}
+                    >
+                        <FigureMain
+                            url={items2[stateItem].FigureMainImg.url}
+                            dataSort={items2[stateItem].FigureMainImg.dataSort}
+                        />
+                        <FigureBox imageBoxes={items2[stateItem].imageBoxes} />
+                        <SlideTitle
+                            slideTitle={items2[stateItem].slideTitle}
+                            textMeta={items2[stateItem].textMeta}
+                            textDescription={items2[stateItem].textDescription}
+                            showContent={handleContent}
+                        />
+                        <Content
+                            p1={items2[stateItem].content.p1}
+                            p2={items2[stateItem].content.p2}
+                            p3={items2[stateItem].content.p3}
+                            hideContent={handleContent}
+                        />
+                    </div>
                 </div>
                 <CursorFx />
             </main>

@@ -1,6 +1,23 @@
+import { timeLine } from "../gsap/timeLine";
 import { animationSettings, sortedslide, shuffleArray } from "../../../utils";
 
-export const horizontalSlide = (currentSlide: any, tl: any, dir: string) => {
+export const currentSlide = (
+  currentSlide: any,
+  dir: string,
+  resolve: (value: void | PromiseLike<void>) => void,
+  setStateItem: React.Dispatch<React.SetStateAction<number>>,
+  index: number
+) => {
+  const start = () => {
+    currentSlide.DOM.el.style.zIndex = 100;
+  };
+
+  const complete = () => {
+    resolve();
+    setStateItem(index);
+  };
+
+  const tl = timeLine({ start, complete });
   const currentSlideFigures = sortedslide(currentSlide.figures, dir, "right");
   currentSlideFigures.forEach((figure: any, pos: any) => {
     tl.to(
@@ -22,7 +39,6 @@ export const horizontalSlide = (currentSlide: any, tl: any, dir: string) => {
       "begin+=" + pos * 0.13
     );
   });
-
   tl.to(
     currentSlide.DOM.text,
     {
@@ -32,15 +48,18 @@ export const horizontalSlide = (currentSlide: any, tl: any, dir: string) => {
     },
     "begin+=" + animationSettings.duration * animationSettings.staggerFactor
   );
-  tl.staggerTo(
+
+  tl.to(
     shuffleArray(currentSlide.innerTitleMainLetters),
-    0.05,
     {
+      stagger: {
+        each: 0.05,
+      },
+      duration: 0.04,
       ease: "easeOut",
       opacity: 0,
     },
-    0.04,
-    "begin+=" + animationSettings.duration * animationSettings.staggerFactor
+    0.04
   );
 
   [...currentSlide.DOM.innerTitle]
@@ -48,8 +67,8 @@ export const horizontalSlide = (currentSlide: any, tl: any, dir: string) => {
     .forEach((inner: any) => {
       tl.to(
         inner,
-        0.1,
         {
+          duration: 0.1,
           ease: "easeOut",
           opacity: 0,
         },

@@ -3,7 +3,7 @@ import { useMousePositionRef } from "../hooks/useMousePosition";
 import useResizeWindowRef from "../hooks/useResize";
 import { lineEq, lerp } from "../utils";
 
-export const useTileFx = () => {
+export const useTileFx = (componentName?: any) => {
   const [lenghtOfElement, setLenghtOfElement] = useState(4);
   const figure: any = useRef<HTMLDivElement>();
   const requestRef: any = useRef(null);
@@ -15,17 +15,19 @@ export const useTileFx = () => {
     lerpFactorOuter: 0.1,
     lerpFactor: (pos: any) => 0.02 * pos + 0.02,
   };
+  Object.assign(options, componentName);
+
   useEffect(() => {
     const moving = [...figure.current.children];
     setLenghtOfElement(moving.length);
   }, []);
 
-  // useEffect(() => {
-  //   requestRef.current = window.requestAnimationFrame(() => render());
-  //   return () => {
-  //     window.cancelAnimationFrame(requestRef.current);
-  //   };
-  // }, [windowSizeref]);
+  useEffect(() => {
+    requestRef.current = window.requestAnimationFrame(() => render());
+    return () => {
+      window.cancelAnimationFrame(requestRef.current);
+    };
+  }, [windowSizeref]);
   let translations = [...new Array(lenghtOfElement)].map(() => ({
     x: 0,
     y: 0,
@@ -68,23 +70,7 @@ export const useTileFx = () => {
 
     requestRef.current = requestAnimationFrame(() => render());
   };
-  const start = () => {
-    requestRef.current = window.requestAnimationFrame(() => render());
-  };
-
-  const stop = () => {
-    const moving: any = [...figure.current.children];
-    window.cancelAnimationFrame(requestRef.current);
-    for (let i = 0; i <= lenghtOfElement - 1; ++i) {
-      translations[i].x = 0;
-      translations[i].y = 0;
-      moving[i].style.transform = `translateX(0px) translateY(0px)`;
-    }
-  };
-
   return {
-    stop,
-    start,
     figure,
   };
 };
