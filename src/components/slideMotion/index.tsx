@@ -46,7 +46,9 @@ function SlideMotion() {
     };
     useEffect(() => {
         initialPhotos().then(() => {
-            upComingSlide(slides.current, "right");
+            if (status === "succeeded") {
+                upComingSlide(slides.current, "right");
+            }
         });
     }, []);
 
@@ -83,7 +85,9 @@ function SlideMotion() {
                 dispatch(fetchPhotos({ page: Index.current.currentIndex }));
             })
             .finally(() => {
-                upComingSlide(slides.current, dir);
+                if (status === "succeeded") {
+                    upComingSlide(slides.current, dir);
+                }
             });
     };
 
@@ -114,14 +118,13 @@ function SlideMotion() {
                         ref={root}
                     >
                         {status === "succeeded" && (
-                            <>
-                                <FigureMain
-                                    url={clone.main.url}
-                                    dataSort={clone.main.dataSort}
-                                />
-                                <FigureBox imageBoxes={clone.imageBoxes} />
-                            </>
+                            <FigureMain
+                                url={clone.main.url}
+                                dataSort={clone.main.dataSort}
+                                loading={status}
+                            />
                         )}
+                        <FigureBox imageBoxes={clone.imageBoxes} loading={status} />
                         <SlideTitle
                             slideTitle={items2[stateItem].slideTitle}
                             textMeta={items2[stateItem].textMeta}

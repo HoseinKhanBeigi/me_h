@@ -48,11 +48,13 @@ export interface SlideTitleProps {
 }
 export interface FigurBoxProps {
   imageBoxes: smallImageComponentProps[];
+  loading: string;
 }
 
 export interface FigureMainProps {
   dataSort: any;
-  url: string;
+  url: any;
+  loading: string;
 }
 
 export interface HeaderInterface {

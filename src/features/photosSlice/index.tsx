@@ -33,13 +33,14 @@ const photosSlice = createSlice({
         },
         [fetchPhotos.fulfilled.type]: (state, action) => {
             state.status = "succeeded";
-            state.entities = [...state.entities, ...action.payload];
-            const imageBoxes: any = []
-            state.entities.map((e, number) => {
-                imageBoxes.push({ url: e.urls.thumb, dataSort: state.entities.length - number });
-            });
+            state.entities = [...action.payload];
             state.clone = {
-                imageBoxes,
+                imageBoxes: state.entities.map((e, number) => {
+                    return {
+                        url: e.urls.thumb,
+                        dataSort: state.entities.length - number
+                    }
+                }),
                 main: { url: state.entities[getRandomInt(10)].urls.regular, dataSort: "3" }
             };
             state.currentRequestId = null;
