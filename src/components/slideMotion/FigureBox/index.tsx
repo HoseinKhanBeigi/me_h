@@ -15,10 +15,13 @@ export const FigureBox: React.FC<FigurBoxProps> = ({ imageBoxes, loading }) => {
                             <img
                                 src={item.url}
                                 alt="A description of the image."
-                                width="200"
-                                height="200"
+                                width="400"
+                                height="500"
                                 loading="lazy"
                                 decoding="async"
+                                sizes="(min-width: 66em) 33vw,
+                                        (min-width: 44em) 50vw,
+                                                        100vw"
                             ></img>
                         </div>
                     </div>

@@ -427,8 +427,10 @@ a:focus {
 }
 
 .slide__figure-img {
-  width: 100%;
-  height: 100%;
+  block-size: auto;
+  aspect-ratio: 2/1;
+  object-fit: cover;
+  object-position: top center;
   position: absolute;
   top: 0;
   left: 0;

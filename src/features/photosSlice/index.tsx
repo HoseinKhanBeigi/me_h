@@ -37,7 +37,7 @@ const photosSlice = createSlice({
             state.clone = {
                 imageBoxes: state.entities.map((e, number) => {
                     return {
-                        url: e.urls.thumb,
+                        url: e.urls.small,
                         dataSort: state.entities.length - number
                     }
                 }),
