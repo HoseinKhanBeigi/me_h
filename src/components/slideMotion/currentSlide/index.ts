@@ -4,8 +4,8 @@ import { animationSettings, sortedslide, shuffleArray } from "../../../utils";
 export const currentSlide = (
   currentSlide: any,
   dir: string,
-  resolve: (value: void | PromiseLike<void>) => void,
   setStateItem: React.Dispatch<React.SetStateAction<number>>,
+  resolve: (value?: unknown) => void,
   index: number
 ) => {
   const start = () => {
@@ -13,8 +13,8 @@ export const currentSlide = (
   };
 
   const complete = () => {
-    resolve();
     setStateItem(index);
+    resolve();
   };
 
   const tl = timeLine({ start, complete });
@@ -50,25 +50,23 @@ export const currentSlide = (
   );
 
   tl.to(
-    shuffleArray(currentSlide.innerTitleMainLetters),
+    shuffleArray([...currentSlide.innerTitleMainLetters]),
     {
-      stagger: {
-        each: 0.05,
-      },
-      duration: 0.04,
+      stagger: 0.07,
+      duration: 0.1,
       ease: "easeOut",
       opacity: 0,
     },
-    0.04
+    "begin+=" + animationSettings.staggerFactor * (2 - 1)
   );
 
   [...currentSlide.DOM.innerTitle]
-    .filter((_: any, pos: any) => pos < currentSlide.innerTitleTotal - 1)
+    .filter((_, pos) => pos < currentSlide.innerTitleTotal - 1)
     .forEach((inner: any) => {
       tl.to(
         inner,
         {
-          duration: 0.1,
+          duration: 0.5,
           ease: "easeOut",
           opacity: 0,
         },

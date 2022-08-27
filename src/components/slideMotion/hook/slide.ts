@@ -10,6 +10,7 @@ export function slide(el: HTMLDivElement | any) {
   const content = el.querySelector(".slide__content");
   const contentcolor = el.dataset.contentcolor;
   const innerTitle = el.querySelector(".slide__title").children;
+
   const text = el.querySelector(".slide__text");
   const innerTitleTotal = innerTitle.length;
   const innerTitleMainLetters = [...innerTitle[innerTitleTotal - 1].children];

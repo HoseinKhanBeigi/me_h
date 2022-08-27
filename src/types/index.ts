@@ -33,7 +33,6 @@ export interface smallImageComponentProps {
   shape: string;
 }
 export interface computeIndex {
-  previousIndex: number;
   currentIndex: number;
 }
 

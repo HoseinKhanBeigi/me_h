@@ -4,16 +4,17 @@ import { animationSettings, sortedslide, shuffleArray } from "../../../utils";
 
 export const upComingSlide = (currentSlide: any, dir: string) => {
   const start = () => {
-    currentSlide.DOM.el.style.zIndex = 100;
+    currentSlide.DOM.el.style.zIndex = 101;
+    console.log("starting...");
   };
 
-  const complete = () => {};
+  const complete = () => {
+    console.log("finished...");
+  };
 
-  const tl = timeLine({ start, complete });
+  const tl: any = timeLine({ start, complete });
 
   const onStartUpcoming = () => {
-    console.log("hiii");
-
     currentSlide.figures.forEach((figure: any) => {
       gsap.set(figure.slideElement, {
         x: dir === "right" ? "-101%" : "101%",
@@ -28,7 +29,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
       }
     });
   };
-  tl.add(onStartUpcoming, animationSettings.staggerFactor * (3 - 1));
+  tl.add(onStartUpcoming, animationSettings.staggerFactor * (2 - 1));
 
   const upcomingSlideFigures = sortedslide(currentSlide.figures, dir, "right");
   upcomingSlideFigures.forEach((figure: any, pos: any) => {
@@ -71,23 +72,20 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
   );
 
   tl.to(
-    shuffleArray(currentSlide.innerTitleMainLetters),
+    shuffleArray([...currentSlide.innerTitleMainLetters]),
     {
-      stagger: {
-        each: 0.05,
-      },
-      duration: 0.04,
+      stagger: 0.07,
+      duration: 0.1,
       ease: "easeOut",
       opacity: 1,
     },
-    0.04
+    "begin+=" + animationSettings.staggerFactor * (2 - 1)
   );
   [...currentSlide.DOM.innerTitle]
-    .filter((_: any, pos: any) => pos < currentSlide.innerTitleTotal - 1)
+    .filter((_, pos) => pos < currentSlide.innerTitleTotal - 1)
     .forEach((inner: any) => {
       tl.to(
         inner,
-
         {
           duration: 0.5,
           ease: "easeOut",

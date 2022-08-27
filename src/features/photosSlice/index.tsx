@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchPhotos } from "../actions";
 import { photosState } from "../../types"
+import { getRandomInt } from "../../utils"
 
 
 
@@ -12,6 +13,9 @@ const initialState: photosState = {
     error: null,
     clone: {}
 };
+
+
+
 
 
 const photosSlice = createSlice({
@@ -28,20 +32,18 @@ const photosSlice = createSlice({
             }
         },
         [fetchPhotos.fulfilled.type]: (state, action) => {
-            const { requestId } = action.meta;
-            if (state.status === "pending" && state.currentRequestId === requestId) {
-                state.status = "succeeded";
-                state.entities = [...state.entities, ...action.payload];
+            state.status = "succeeded";
+            state.entities = [...state.entities, ...action.payload];
+            const imageBoxes: any = []
+            state.entities.map((e, number) => {
+                imageBoxes.push({ url: e.urls.thumb, dataSort: state.entities.length - number });
+            });
+            state.clone = {
+                imageBoxes,
+                main: { url: state.entities[getRandomInt(10)].urls.regular, dataSort: "3" }
+            };
+            state.currentRequestId = null;
 
-                const imageBoxes: any = []
-                state.entities.map((e, number) => {
-                    imageBoxes.push({ url: e.urls, dataSort: state.entities.length - number });
-                });
-                state.clone = [{
-                    imageBoxes,
-                }];
-                state.currentRequestId = null;
-            }
         },
         [fetchPhotos.rejected.type]: (state, action) => {
             const { requestId } = action.meta;

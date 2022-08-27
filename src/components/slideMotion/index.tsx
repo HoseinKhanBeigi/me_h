@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useMemo, ReactNode } from "react";
 import { CursorFx } from "./mouseCursor";
 import { gsap } from "gsap";
 import { currentSlide } from "./currentSlide";
-import { upComingSlide } from "./upComingSlide"
+import { upComingSlide } from "./upComingSlide";
 import { toggleContent } from "./toggleContent";
 import { computeIndex } from "../../types";
 import { FigureMain } from "./FigureMain";
@@ -13,6 +13,7 @@ import { SlideTitle } from "./SlideTitle";
 import { slide } from "./hook/slide";
 import { useSelector, useDispatch } from "react-redux";
 import { useAppSelector, useAppDispatch } from "../../hooks/useDispatch";
+import { fetchPhotos } from "../../features/actions";
 import { items2 } from "../../utils/items";
 import "../../app.scss";
 
@@ -24,23 +25,30 @@ function SlideMotion() {
     const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
     const slides: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const Index: React.MutableRefObject<computeIndex> = useRef({
-        previousIndex: 0,
-        currentIndex: 0,
+        currentIndex: 1,
     });
-
-    const root: React.MutableRefObject<HTMLDivElement | any> = useRef()
-
+    const root: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const { entities, status, error, clone } = useAppSelector(
         (state) => state.photoSlice
     );
 
     useEffect(() => {
-        // dispatch(fetchPhotos(1));
         [...slideshow.current.querySelectorAll(".slide")].forEach((el, i) => {
             slides.current = slide(el);
         });
-    }, []);
+    }, [Index.current.currentIndex, status]);
 
+    const initialPhotos = () => {
+        return new Promise<void>((resolve) => {
+            dispatch(fetchPhotos({ page: 1 }));
+            resolve();
+        });
+    };
+    useEffect(() => {
+        initialPhotos().then(() => {
+            upComingSlide(slides.current, "right");
+        });
+    }, []);
 
     const completedAnimationContent = (action: string) => {
         if (action === "hide") {
@@ -54,31 +62,30 @@ function SlideMotion() {
         const currentSlide = slides.current;
         toggleContent(action, currentSlide, completedAnimationContent);
     };
-
-    const navigation = (dir: string) => {
-        if (dir === "right") {
-            if (Index.current.currentIndex < items2.length - 1) {
-                Index.current.currentIndex = Index.current.currentIndex + 1;
-            } else {
-                Index.current.currentIndex = 0;
-            }
-        } else {
-            Index.current.currentIndex = Index.current.currentIndex - 1;
-        }
-        computeSlide(dir, Index.current.currentIndex).then(() => upComingSlide(slides.current, dir));
+    const computeSlide = (dir: string, index: number) => {
+        return new Promise((resolve) => {
+            currentSlide(slides.current, dir, setStateItem, resolve, index);
+        });
     };
 
-    useEffect(() => {
-        upComingSlide(slides.current, "right")
-    }, []);
+    const navigation = (dir: string) => {
+        Index.current.currentIndex =
+            dir === "right"
+                ? Index.current.currentIndex < 100 - 1
+                    ? (Index.current.currentIndex = Index.current.currentIndex + 1)
+                    : 0
+                : Index.current.currentIndex > 0
+                    ? Index.current.currentIndex - 1
+                    : 100 - 1;
 
-    const computeSlide = (dir: string, index: number) => {
-        return new Promise<void>((resolve) => {
-            currentSlide(slides.current, dir, resolve, setStateItem, index)
-        })
-    }
-
-
+        computeSlide(dir, Index.current.currentIndex)
+            .then(() => {
+                dispatch(fetchPhotos({ page: Index.current.currentIndex }));
+            })
+            .finally(() => {
+                upComingSlide(slides.current, dir);
+            });
+    };
 
     return (
         <>
@@ -96,20 +103,25 @@ function SlideMotion() {
                 <Header
                     navigate={navigation}
                     currentIndex={PaginationSlide.currentIndex}
-                    length={1}
+                    length={100}
                     isContentOpen={isContentOpen}
                 />
+
                 <div className="slideshow" ref={slideshow}>
                     <div
-                        className={`slide slide--layout-${items2[stateItem].numberOfLayout}`}
+                        className={`slide slide--layout-1`}
                         data-contentcolor={items2[stateItem].dataContentcolor}
                         ref={root}
                     >
-                        <FigureMain
-                            url={items2[stateItem].FigureMainImg.url}
-                            dataSort={items2[stateItem].FigureMainImg.dataSort}
-                        />
-                        <FigureBox imageBoxes={items2[stateItem].imageBoxes} />
+                        {status === "succeeded" && (
+                            <>
+                                <FigureMain
+                                    url={clone.main.url}
+                                    dataSort={clone.main.dataSort}
+                                />
+                                <FigureBox imageBoxes={clone.imageBoxes} />
+                            </>
+                        )}
                         <SlideTitle
                             slideTitle={items2[stateItem].slideTitle}
                             textMeta={items2[stateItem].textMeta}
@@ -124,6 +136,7 @@ function SlideMotion() {
                         />
                     </div>
                 </div>
+
                 <CursorFx />
             </main>
         </>
