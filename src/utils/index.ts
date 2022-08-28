@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from "react";
 export const lineEq = (y2: any, y1: any, x2: any, x1: any, currentVal: any) => {
   let m = (y2 - y1) / (x2 - x1);
   let b = y1 - m * x1;
