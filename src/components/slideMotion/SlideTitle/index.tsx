@@ -1,6 +1,6 @@
 import { SlideTitleProps } from "../../../types";
 import { useTileFx } from "../../../hooks/useTileFx";
-import { Charming } from "../../charming"
+import { Charming } from "../../charming";
 
 export const SlideTitle: React.FC<SlideTitleProps> = ({
     slideTitle,
@@ -18,9 +18,15 @@ export const SlideTitle: React.FC<SlideTitleProps> = ({
     return (
         <>
             <h2 className="slide__title" ref={root.figure}>
-                <span className="slide__title-inner"><Charming letters={slideTitle} /></span>
-                <span className="slide__title-inner"><Charming letters={slideTitle} /></span>
-                <span className="slide__title-inner"><Charming letters={slideTitle} /></span>
+                <span className="slide__title-inner">
+                    <Charming letters={slideTitle} />
+                </span>
+                <span className="slide__title-inner">
+                    <Charming letters={slideTitle} />
+                </span>
+                <span className="slide__title-inner">
+                    <Charming letters={slideTitle} />
+                </span>
             </h2>
             <div className="slide__text slide__text--right">
                 <p className="slide__text-meta">{textMeta}</p>
