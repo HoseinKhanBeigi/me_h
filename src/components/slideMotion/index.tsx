@@ -3,7 +3,6 @@ import React, {
     useState,
     useRef,
     useMemo,
-    useCallback,
 } from "react";
 import { CursorFx } from "./mouseCursor";
 import { currentSlide } from "./currentSlide";
@@ -25,17 +24,16 @@ function SlideMotion() {
         return getRandom(5);
     }, []);
     const dispatch = useAppDispatch();
-    let params = useParams();
-    const [stateItem, setStateItem] = useState(0);
+    const params = useParams();
     const slideshow: React.MutableRefObject<HTMLDivElement | any> = useRef();
-    const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
     const slides: React.MutableRefObject<HTMLDivElement | any> = useRef();
-    const [layout, setLayout] = useState(getRandomNumber);
-
     const root: React.MutableRefObject<HTMLDivElement | any> = useRef();
-    const { entities, status, error, clone } = useAppSelector(
+    const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
+    const [layout, setLayout] = useState(getRandomNumber);
+    const { status, clone } = useAppSelector(
         (state) => state.photoSlice
     );
+
 
     useEffect(() => {
         if (status === "succeeded") {
@@ -121,14 +119,14 @@ function SlideMotion() {
         const currentSlide = slides.current;
         toggleContent(action, currentSlide, completedAnimationContent);
     };
-    const computeSlide = (dir: string, index: number) => {
+    const computeSlide = (dir: string) => {
         return new Promise((resolve) => {
-            currentSlide(slides.current, dir, setStateItem, resolve, index);
+            currentSlide(slides.current, dir, resolve);
         });
     };
 
     const navigation = (dir: string, index: number) => {
-        computeSlide(dir, index)
+        computeSlide(dir)
             .then(() => {
                 dispatch(fetchPhotos({ page: index }));
             })
@@ -142,20 +140,9 @@ function SlideMotion() {
 
     return (
         <>
-            <svg className="hidden">
-                <symbol id="icon-arrow" viewBox="0 0 24 24">
-                    <title>arrow</title>
-                    <polygon points="6.3,12.8 20.9,12.8 20.9,11.2 6.3,11.2 10.2,7.2 9,6 3.1,12 9,18 10.2,16.8 " />
-                </symbol>
-                <symbol id="icon-nav" viewBox="0 0 407 660">
-                    <title>caret</title>
-                    <path d="M77 0L0 77l253 253L0 583l77 77 330-330z" />
-                </symbol>
-            </svg>
             {status === "succeeded" && (
                 <main>
                     <Header navigate={navigation} isContentOpen={isContentOpen} />
-
                     <div className="slideshow" ref={slideshow}>
                         <div
                             className={`slide slide--layout-${layout}`}

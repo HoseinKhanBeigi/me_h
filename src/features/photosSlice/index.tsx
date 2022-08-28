@@ -42,7 +42,7 @@ const photosSlice = createSlice({
                     }
                 }),
                 dataContentcolor: "#e4d0a2",
-                main: { url: state.entities[getRandom(10)].urls.regular, dataSort: "3" },
+                main: { url: state.entities[getRandom(8)].urls.regular, dataSort: "3" },
                 slideTitle: "Mhopsis",
                 textMeta: "by Andrew Moore on 2/21",
                 textDescription:

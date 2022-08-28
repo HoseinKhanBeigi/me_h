@@ -4,16 +4,13 @@ import { animationSettings, sortedslide, shuffleArray } from "../../../utils";
 export const currentSlide = (
   currentSlide: any,
   dir: string,
-  setStateItem: React.Dispatch<React.SetStateAction<number>>,
-  resolve: (value?: unknown) => void,
-  index: number
+  resolve: (value?: unknown) => void
 ) => {
   const start = () => {
     currentSlide.DOM.el.style.zIndex = 100;
   };
 
   const complete = () => {
-    setStateItem(index);
     resolve();
   };
 
