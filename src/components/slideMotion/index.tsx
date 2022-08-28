@@ -20,16 +20,13 @@ import { getRandom } from "../../utils/index";
 import "../../app.scss";
 
 function SlideMotion() {
-    const getRandomNumber = useMemo(() => {
-        return getRandom(5);
-    }, []);
     const dispatch = useAppDispatch();
     const params = useParams();
     const slideshow: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const slides: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const root: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
-    const [layout, setLayout] = useState(getRandomNumber);
+    const [layout, setLayout] = useState(getRandom(5));
     const { status, clone } = useAppSelector(
         (state) => state.photoSlice
     );
@@ -133,7 +130,7 @@ function SlideMotion() {
             .finally(() => {
                 if (status === "succeeded") {
                     upComingSlide(slides.current, dir);
-                    setLayout(getRandomNumber);
+                    setLayout(getRandom(5));
                 }
             });
     };
