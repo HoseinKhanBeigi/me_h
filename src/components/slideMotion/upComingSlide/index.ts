@@ -5,12 +5,9 @@ import { animationSettings, sortedslide, shuffleArray } from "../../../utils";
 export const upComingSlide = (currentSlide: any, dir: string) => {
   const start = () => {
     currentSlide.DOM.el.style.zIndex = 101;
-    console.log("starting...");
   };
 
-  const complete = () => {
-    console.log("finished...");
-  };
+  const complete = () => {};
 
   const tl: any = timeLine({ start, complete });
 

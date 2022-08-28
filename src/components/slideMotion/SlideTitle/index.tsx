@@ -1,11 +1,6 @@
-import { useEffect, useRef } from "react";
 import { SlideTitleProps } from "../../../types";
 import { useTileFx } from "../../../hooks/useTileFx";
-import { gsap } from "gsap";
-import { timeLine } from "../gsap/timeLine";
-import { animationSettings, sortedslide, shuffleArray } from "../../../utils";
-import { Charming } from "../hook/charming"
-// const charming = require("charming");
+import { Charming } from "../../charming"
 
 export const SlideTitle: React.FC<SlideTitleProps> = ({
     slideTitle,
@@ -19,6 +14,7 @@ export const SlideTitle: React.FC<SlideTitleProps> = ({
         lerpFactor: (pos: any) => 0.02 * pos + 0.02,
     };
     const root = useTileFx(options);
+
     return (
         <>
             <h2 className="slide__title" ref={root.figure}>

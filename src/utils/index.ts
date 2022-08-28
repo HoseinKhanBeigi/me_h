@@ -1,11 +1,12 @@
+import { useCallback, useMemo } from "react";
 export const lineEq = (y2: any, y1: any, x2: any, x1: any, currentVal: any) => {
   let m = (y2 - y1) / (x2 - x1);
   let b = y1 - m * x1;
   return m * currentVal + b;
 };
 
-export function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max);
+export function getRandom(max: number) {
+  return Math.floor(Math.random() * max) + 1;
 }
 
 export const lerp = (a: any, b: any, n: any) => {

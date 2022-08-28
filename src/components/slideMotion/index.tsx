@@ -1,36 +1,41 @@
-import React, { useEffect, useState, useRef, useMemo, ReactNode } from "react";
+import React, {
+    useEffect,
+    useState,
+    useRef,
+    useMemo,
+    useCallback,
+} from "react";
 import { CursorFx } from "./mouseCursor";
-import { gsap } from "gsap";
 import { currentSlide } from "./currentSlide";
 import { upComingSlide } from "./upComingSlide";
 import { toggleContent } from "./toggleContent";
-import { computeIndex } from "../../types";
 import { FigureMain } from "./FigureMain";
 import { FigureBox } from "./FigureBox";
 import { Content } from "./content";
 import { Header } from "./header";
 import { SlideTitle } from "./SlideTitle";
-import { useSelector, useDispatch } from "react-redux";
 import { useAppSelector, useAppDispatch } from "../../hooks/useDispatch";
 import { fetchPhotos } from "../../features/actions";
-import { items2 } from "../../utils/items";
+import { useParams } from "react-router-dom";
+import { getRandom } from "../../utils/index";
 import "../../app.scss";
 
 function SlideMotion() {
+    const getRandomNumber = useMemo(() => {
+        return getRandom(5);
+    }, []);
     const dispatch = useAppDispatch();
+    let params = useParams();
     const [stateItem, setStateItem] = useState(0);
-    const { PaginationSlide, Slides } = useSelector((state: any) => state);
     const slideshow: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
     const slides: React.MutableRefObject<HTMLDivElement | any> = useRef();
-    const Index: React.MutableRefObject<computeIndex> = useRef({
-        currentIndex: 1,
-    });
+    const [layout, setLayout] = useState(getRandomNumber);
+
     const root: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const { entities, status, error, clone } = useAppSelector(
         (state) => state.photoSlice
     );
-
 
     useEffect(() => {
         if (status === "succeeded") {
@@ -38,9 +43,7 @@ function SlideMotion() {
                 slides.current = slide(el);
             });
         }
-
-    }, [Index.current.currentIndex, status]);
-
+    }, [params.id, status]);
     function figure(el: HTMLDivElement | any) {
         const img = el.querySelector(".slide__figure-img");
         const parentElement = el;
@@ -58,8 +61,7 @@ function SlideMotion() {
             isMain,
             slideElement,
             inner,
-        }
-
+        };
     }
 
     function slide(el: HTMLDivElement | any) {
@@ -125,23 +127,15 @@ function SlideMotion() {
         });
     };
 
-    const navigation = (dir: string) => {
-        Index.current.currentIndex =
-            dir === "right"
-                ? Index.current.currentIndex < 100 - 1
-                    ? (Index.current.currentIndex = Index.current.currentIndex + 1)
-                    : 0
-                : Index.current.currentIndex > 0
-                    ? Index.current.currentIndex - 1
-                    : 100 - 1;
-
-        computeSlide(dir, Index.current.currentIndex)
+    const navigation = (dir: string, index: number) => {
+        computeSlide(dir, index)
             .then(() => {
-                dispatch(fetchPhotos({ page: Index.current.currentIndex }));
+                dispatch(fetchPhotos({ page: index }));
             })
             .finally(() => {
                 if (status === "succeeded") {
                     upComingSlide(slides.current, dir);
+                    setLayout(getRandomNumber);
                 }
             });
     };
@@ -160,20 +154,14 @@ function SlideMotion() {
             </svg>
             {status === "succeeded" && (
                 <main>
-                    <Header
-                        navigate={navigation}
-                        currentIndex={PaginationSlide.currentIndex}
-                        length={100}
-                        isContentOpen={isContentOpen}
-                    />
+                    <Header navigate={navigation} isContentOpen={isContentOpen} />
 
                     <div className="slideshow" ref={slideshow}>
                         <div
-                            className={`slide slide--layout-1`}
-                            data-contentcolor={items2[stateItem].dataContentcolor}
+                            className={`slide slide--layout-${layout}`}
+                            data-contentcolor={clone.dataContentcolor}
                             ref={root}
                         >
-
                             <FigureMain
                                 url={clone.main.url}
                                 dataSort={clone.main.dataSort}
@@ -182,15 +170,15 @@ function SlideMotion() {
 
                             <FigureBox imageBoxes={clone.imageBoxes} loading={status} />
                             <SlideTitle
-                                slideTitle={items2[stateItem].slideTitle}
-                                textMeta={items2[stateItem].textMeta}
-                                textDescription={items2[stateItem].textDescription}
+                                slideTitle={clone.slideTitle}
+                                textMeta={clone.textMeta}
+                                textDescription={clone.textDescription}
                                 showContent={handleContent}
                             />
                             <Content
-                                p1={items2[stateItem].content.p1}
-                                p2={items2[stateItem].content.p2}
-                                p3={items2[stateItem].content.p3}
+                                p1={clone.content.p1}
+                                p2={clone.content.p2}
+                                p3={clone.content.p3}
                                 hideContent={handleContent}
                             />
                         </div>

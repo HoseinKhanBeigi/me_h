@@ -58,9 +58,7 @@ export interface FigureMainProps {
 }
 
 export interface HeaderInterface {
-  navigate: (value: string) => void;
-  currentIndex: number;
-  length: number;
+  navigate: (value: string, index: number) => void;
   isContentOpen: boolean;
 }
 

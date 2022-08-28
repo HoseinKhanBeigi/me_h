@@ -5,8 +5,6 @@ interface ICharmingProps {
     letters: string;
 }
 export const Charming: React.FC<ICharmingProps> = ({ letters }) => {
-
-
     const charmed = React.useMemo(() => {
         const ltrs = runes(letters);
         return ltrs.map((ltr: string, idx: number) => {
@@ -18,12 +16,7 @@ export const Charming: React.FC<ICharmingProps> = ({ letters }) => {
         });
     }, [letters]);
 
-    return (
-        <>
-            {charmed}
-        </>
-
-    );
+    return <>{charmed}</>;
 };
 
 export default Charming;

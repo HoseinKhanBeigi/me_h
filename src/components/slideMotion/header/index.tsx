@@ -1,35 +1,38 @@
+import React, { useEffect } from "react";
+import { HeaderInterface } from "../../../types";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import { useParams, useNavigate } from "react-router-dom";
 
-import { HeaderInterface } from "../../../types"
-export const Header: React.FC<HeaderInterface> = ({ navigate, currentIndex, length, isContentOpen }) => {
+export const Header: React.FC<HeaderInterface> = ({ navigate, isContentOpen }) => {
+    let params = useParams();
+    const [page, setPage] = React.useState(1);
+    const history = useNavigate();
+    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+        history(`/${value}`)
+        setPage(value);
+        if (Number(params.id) > value) {
+            navigate('right', Number(value))
+        } else if (Number(params.id) < value) {
+            navigate('left', Number(value))
+        }
+    }
+    useEffect(() => {
+        if (!params.id) {
+            console.log(params, "params");
+            history(`/${1}`);
+            setPage(1);
+        } else
+            setPage(Number(params.id));
+    }, [params])
     return (
         <div className="frame">
             <div className="frame__title-wrap">
-                <h1 className="frame__title">Layer Motion Slideshow in React</h1>
                 <div className="nav">
                     <div className="nav__counter">
-                        <span>{currentIndex}</span>/<span>{length}</span>
-                    </div>
-                    <div className="nav__arrows">
-                        <button
-                            className="nav__arrow nav__arrow--prev"
-                            data-hover
-                            disabled={isContentOpen}
-                            onClick={() => navigate("left")}
-                        >
-                            <svg className="icon icon--rotated icon--nav">
-                                <use xlinkHref="#icon-nav"></use>
-                            </svg>
-                        </button>
-                        <button
-                            className="nav__arrow nav__arrow--next"
-                            data-hover
-                            disabled={isContentOpen}
-                            onClick={() => navigate("right")}
-                        >
-                            <svg className="icon icon--nav">
-                                <use xlinkHref="#icon-nav"></use>
-                            </svg>
-                        </button>
+                        <Stack spacing={2}>
+                            <Pagination count={10} color="primary" page={Number(page)} onChange={handleChange} disabled={isContentOpen} />
+                        </Stack>
                     </div>
                 </div>
             </div>
