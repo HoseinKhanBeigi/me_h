@@ -44,7 +44,7 @@ function SlideMotion() {
 
     const initialPhotos = () => {
         return new Promise<void>((resolve) => {
-            dispatch(fetchPhotos({ page: 1 }));
+            dispatch(fetchPhotos({ page: params.id ?? 1 }));
             resolve();
         });
     };
