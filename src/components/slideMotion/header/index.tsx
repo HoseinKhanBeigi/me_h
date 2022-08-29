@@ -19,7 +19,6 @@ export const Header: React.FC<HeaderInterface> = ({ navigate, isContentOpen }) =
     }
     useEffect(() => {
         if (!params.id) {
-            console.log(params, "params");
             history(`/${1}`);
             setPage(1);
         } else
