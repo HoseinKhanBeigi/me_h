@@ -2,6 +2,30 @@ export interface ImageComponentProps {
   dataSort: string;
   url: string;
 }
+
+export interface DomProviderProps {
+  children: React.ReactNode;
+}
+
+export interface slide {
+  DOM: {
+    el: any;
+    content: any;
+    innerTitle: any;
+    backFromContentCtrl: any;
+    title: any;
+    text: any;
+  };
+  figures: any;
+  contentcolor: any;
+  innerTitleMainLetters: any[];
+  innerTitleTotal: any;
+  titleLettersTotal: number;
+}
+
+export interface DomContextType {
+  slide: (el: HTMLDivElement | any) => slide;
+}
 export interface mainImageComponentProps {
   dataSort: string;
   url: string;

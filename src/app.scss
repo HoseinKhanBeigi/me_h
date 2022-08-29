@@ -178,6 +178,10 @@ html {
   height: 100%;
 }
 
+.filterImg{
+  filter: blur(5px);
+}
+
 body {
   --color-text: #100f0f;
   --color-text-alt: #c0c0c0;

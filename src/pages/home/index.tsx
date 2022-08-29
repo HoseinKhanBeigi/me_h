@@ -1,9 +1,12 @@
 import { memo } from "react";
-import SlideMotion from "../../components/slideMotion"
+import SlideMotion from "../../components/slideMotion";
+import DomProvider from "../../context/domContext";
 
 function Home() {
     return (
-        <SlideMotion />
+        <DomProvider>
+            <SlideMotion />
+        </DomProvider>
     );
 }
 
