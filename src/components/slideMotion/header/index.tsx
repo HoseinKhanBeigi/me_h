@@ -13,7 +13,7 @@ export const Header: React.FC<HeaderInterface> = ({ navigate, isContentOpen }) =
         setPage(value);
         if (Number(params.id) > value) {
             navigate('right', Number(value))
-        } else if (Number(params.id) < value) {
+        } else {
             navigate('left', Number(value))
         }
     }
