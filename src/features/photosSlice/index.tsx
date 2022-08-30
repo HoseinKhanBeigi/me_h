@@ -16,15 +16,10 @@ const photosSlice = createSlice({
     name: "photos",
     initialState,
     reducers: {},
-    extraReducers: {
-        [fetchPhotos.pending.type]: (state, action) => {
-            const { requestId } = action.meta;
-
-            state.status = "pending";
-            state.currentRequestId = requestId;
-
-        },
-        [fetchPhotos.fulfilled.type]: (state, action) => {
+    extraReducers(builder) {
+        builder.addCase(fetchPhotos.pending, (state, action) => {
+            state.status = "pending"
+        }).addCase(fetchPhotos.fulfilled, (state, action) => {
             state.status = "succeeded";
             state.entities = [...action.payload];
             state.clone = {
@@ -46,17 +41,12 @@ const photosSlice = createSlice({
                     p3: "The collector of old silver must have a pretty taste and a fine judgment. It is not an absolute law that age determines beauty. Hall-marks, though they denote date, do not guarantee excellence of design. Everything that bears the hall-mark of the Goldsmiths’ Hall of London is not beautiful, whether it be old or whether it be new. The connoisseur must digest the fact that the assay marks of the lion, the leopard’s head, the date-mark, and the rest, are so many official symbols, accurate as to date and sufficient guarantee as to the standard of the metal, but meaningless in regard to the art of the piece on which they stand. The assay offices are merely stamping machines. What Somerset House is to legal documents so the assay offices are to silver and gold plate, and nothing more. Hence the necessity of placing such mechanical control under Government supervision.",
                 },
             };
-            state.currentRequestId = null;
-        },
-        [fetchPhotos.rejected.type]: (state, action) => {
-            const { requestId } = action.meta;
-            if (state.status === "pending") {
-                state.status = "failed";
-                state.error = action.error;
-                state.currentRequestId = null;
-            }
-        },
-    },
+        }).addCase(fetchPhotos.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.error;
+        })
+    }
+
 });
 
 export default photosSlice.reducer;

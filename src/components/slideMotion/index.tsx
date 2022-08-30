@@ -30,6 +30,7 @@ function SlideMotion() {
     const slideshow: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const slides: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const root: React.MutableRefObject<HTMLDivElement | any> = useRef();
+    const dirct: React.MutableRefObject<string> = useRef('right');
     const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
     const [layout, setLayout] = useState(getRandom(5));
     const { status, clone } = useAppSelector((state) => state.photoSlice);
@@ -43,8 +44,10 @@ function SlideMotion() {
     }, [params.id, status]);
 
     useEffect(() => {
-        dispatch(fetchPhotos({ page: params.id ?? 1 }));
-    }, []);
+        if (status === "idle") {
+            dispatch(fetchPhotos({ page: params.id ?? 1 }));
+        }
+    }, [dispatch, status]);
 
 
     const completedAnimationContent = (action: string) => {
@@ -61,22 +64,20 @@ function SlideMotion() {
     };
     const getDispatch = (index: number, dir: string) => {
         dispatch(fetchPhotos({ page: index }));
-        upComingSlide(slides.current, dir);
-        setLayout(getRandom(5));
+
     };
 
     const navigation = useCallback((dir: string, index: number) => {
+        dirct.current = dir
         currentSlide(slides.current, dir, getDispatch, index);
     }, []);
 
     useLayoutEffect(() => {
         if (status === "succeeded") {
-            upComingSlide(slides.current, "right");
+            upComingSlide(slides.current, dirct.current);
             setLayout(getRandom(5));
         }
     }, [status]);
-
-
 
     return (
         <>
