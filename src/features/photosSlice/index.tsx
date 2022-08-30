@@ -19,10 +19,10 @@ const photosSlice = createSlice({
     extraReducers: {
         [fetchPhotos.pending.type]: (state, action) => {
             const { requestId } = action.meta;
-            if (state.status === "idle") {
-                state.status = "pending";
-                state.currentRequestId = requestId;
-            }
+
+            state.status = "pending";
+            state.currentRequestId = requestId;
+
         },
         [fetchPhotos.fulfilled.type]: (state, action) => {
             state.status = "succeeded";
