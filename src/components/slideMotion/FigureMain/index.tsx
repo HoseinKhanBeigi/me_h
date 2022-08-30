@@ -14,7 +14,6 @@ const FigureMain: React.FC<FigureMainProps> = ({
     const handleOnLoad = () => {
         setIsLoaded(false)
     }
-
     const arr: any = Array(4).keys()
 
     return (

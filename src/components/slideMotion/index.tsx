@@ -81,7 +81,7 @@ function SlideMotion() {
 
     return (
         <>
-            {status !== "succeeded" ? (
+            {status === "pending" || status === "idle" ? (
                 <div className="loading" />
             ) : (
 
