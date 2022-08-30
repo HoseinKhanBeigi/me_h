@@ -3,14 +3,15 @@ import React, {
     useState,
     useRef,
     useContext,
-    useMemo,
+    useLayoutEffect,
+    useCallback,
 } from "react";
 import { CursorFx } from "./mouseCursor";
 import { currentSlide } from "./currentSlide";
 import { upComingSlide } from "./upComingSlide";
 import { toggleContent } from "./toggleContent";
-import { FigureMain } from "./FigureMain";
-import { FigureBox } from "./FigureBox";
+import FigureMain from "./FigureMain";
+import FigureBox from "./FigureBox";
 import { Content } from "./content";
 import { Header } from "./header";
 import { SlideTitle } from "./SlideTitle";
@@ -21,6 +22,7 @@ import { getRandom } from "../../utils/index";
 import { DomContext } from "../../context/domContext";
 import "../../app.scss";
 
+
 function SlideMotion() {
     const dispatch = useAppDispatch();
     const params = useParams();
@@ -30,10 +32,9 @@ function SlideMotion() {
     const root: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
     const [layout, setLayout] = useState(getRandom(5));
-    const { status, clone } = useAppSelector(
-        (state) => state.photoSlice
-    );
-    useEffect(() => {
+    const { status, clone } = useAppSelector((state) => state.photoSlice);
+
+    useLayoutEffect(() => {
         if (status === "succeeded") {
             [...slideshow.current.querySelectorAll(".slide")].forEach((el, i) => {
                 slides.current = slide(el);
@@ -41,19 +42,10 @@ function SlideMotion() {
         }
     }, [params.id, status]);
 
-    const initialPhotos = () => {
-        return new Promise<void>((resolve) => {
-            dispatch(fetchPhotos({ page: params.id ?? 1 }));
-            resolve();
-        });
-    };
     useEffect(() => {
-        initialPhotos().then(() => {
-            if (status === "succeeded") {
-                upComingSlide(slides.current, "right");
-            }
-        });
+        dispatch(fetchPhotos({ page: params.id ?? 1 }));
     }, []);
+
 
     const completedAnimationContent = (action: string) => {
         if (action === "hide") {
@@ -67,28 +59,31 @@ function SlideMotion() {
         const currentSlide = slides.current;
         toggleContent(action, currentSlide, completedAnimationContent);
     };
-    const computeSlide = (dir: string) => {
-        return new Promise((resolve) => {
-            currentSlide(slides.current, dir, resolve);
-        });
+    const getDispatch = (index: number, dir: string) => {
+        dispatch(fetchPhotos({ page: index }));
+        upComingSlide(slides.current, dir);
+        setLayout(getRandom(5));
     };
 
-    const navigation = (dir: string, index: number) => {
-        computeSlide(dir)
-            .then(() => {
-                dispatch(fetchPhotos({ page: index }));
-            })
-            .finally(() => {
-                if (status === "succeeded") {
-                    upComingSlide(slides.current, dir);
-                    setLayout(getRandom(5));
-                }
-            });
-    };
+    const navigation = useCallback((dir: string, index: number) => {
+        currentSlide(slides.current, dir, getDispatch, index);
+    }, []);
+
+    useLayoutEffect(() => {
+        if (status === "succeeded") {
+            upComingSlide(slides.current, "right");
+            setLayout(getRandom(5));
+        }
+    }, [status]);
+
+
 
     return (
         <>
-            {status !== "succeeded" ? (<div className="loading" />) : (
+            {status !== "succeeded" ? (
+                <div className="loading" />
+            ) : (
+
                 <main>
                     <Header navigate={navigation} isContentOpen={isContentOpen} />
                     <div className="slideshow" ref={slideshow}>
@@ -97,13 +92,15 @@ function SlideMotion() {
                             data-contentcolor={clone.dataContentcolor}
                             ref={root}
                         >
+
                             <FigureMain
                                 url={clone.main.url}
                                 dataSort={clone.main.dataSort}
                                 loading={status}
                             />
-
                             <FigureBox imageBoxes={clone.imageBoxes} loading={status} />
+
+
                             <SlideTitle
                                 slideTitle={clone.slideTitle}
                                 textMeta={clone.textMeta}

@@ -12,6 +12,7 @@ export const createAsyncAction = (url: string) => {
           client_id: process.env.REACT_APP_LIENT_ID,
         },
       });
+
       const data = JSON.parse(JSON.stringify(response?.data));
       return data;
     } catch (err: any) {

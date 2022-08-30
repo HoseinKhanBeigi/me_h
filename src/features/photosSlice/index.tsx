@@ -1,9 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchPhotos } from "../actions";
-import { photosState } from "../../types"
-import { getRandom } from "../../utils"
-
-
+import { photosState } from "../../types";
+import { getRandom } from "../../utils";
 
 const initialState: photosState = {
     entities: [] as any,
@@ -11,24 +9,19 @@ const initialState: photosState = {
     currentRequestId: "",
     photos: [] as any,
     error: null,
-    clone: {}
+    clone: {},
 };
-
-
-
-
 
 const photosSlice = createSlice({
     name: "photos",
     initialState,
-    reducers: {
-
-    },
+    reducers: {},
     extraReducers: {
         [fetchPhotos.pending.type]: (state, action) => {
+            const { requestId } = action.meta;
             if (state.status === "idle") {
                 state.status = "pending";
-                state.currentRequestId = action.meta.requestId;
+                state.currentRequestId = requestId;
             }
         },
         [fetchPhotos.fulfilled.type]: (state, action) => {
@@ -38,8 +31,8 @@ const photosSlice = createSlice({
                 imageBoxes: state.entities.map((e, number) => {
                     return {
                         url: e.urls.small,
-                        dataSort: state.entities.length - number
-                    }
+                        dataSort: state.entities.length - number,
+                    };
                 }),
                 dataContentcolor: "#e4d0a2",
                 main: { url: state.entities[getRandom(8)].urls.regular, dataSort: "3" },
@@ -54,11 +47,10 @@ const photosSlice = createSlice({
                 },
             };
             state.currentRequestId = null;
-
         },
         [fetchPhotos.rejected.type]: (state, action) => {
             const { requestId } = action.meta;
-            if (state.status === "pending" && state.currentRequestId === requestId) {
+            if (state.status === "pending") {
                 state.status = "failed";
                 state.error = action.error;
                 state.currentRequestId = null;

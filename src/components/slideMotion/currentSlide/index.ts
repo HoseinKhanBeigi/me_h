@@ -4,14 +4,15 @@ import { animationSettings, sortedslide, shuffleArray } from "../../../utils";
 export const currentSlide = (
   currentSlide: any,
   dir: string,
-  resolve: (value?: unknown) => void
+  getDispatch: (val: number, dir: string) => void,
+  index: number
 ) => {
   const start = () => {
     currentSlide.DOM.el.style.zIndex = 100;
   };
 
   const complete = () => {
-    resolve();
+    getDispatch(index, dir);
   };
 
   const tl = timeLine({ start, complete });

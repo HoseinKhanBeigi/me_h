@@ -1,6 +1,11 @@
+import { useState } from "react"
 import { FigurBoxProps } from "../../../types";
 import clsx from "clsx";
-export const FigureBox: React.FC<FigurBoxProps> = ({ imageBoxes, loading }) => {
+const FigureBox: React.FC<FigurBoxProps> = ({ imageBoxes, loading }) => {
+    const [isLoaded, setIsLoaded] = useState(true);
+    const handleOnLoad = () => {
+        setIsLoaded(false)
+    }
     return (
         <>
             {imageBoxes.map((item: any, i: number) => (
@@ -11,14 +16,15 @@ export const FigureBox: React.FC<FigurBoxProps> = ({ imageBoxes, loading }) => {
                 >
                     <img
                         className={clsx("slide__figure-img", {
-                            filterImg: loading !== "succeeded",
+                            filterImg: isLoaded,
                         })}
-                        src={loading === "succeeded" && item.url}
+                        src={item.url}
                         alt="A description of the image."
                         width="400"
                         height="500"
                         loading="lazy"
                         decoding="async"
+                        onLoad={handleOnLoad}
                         sizes="(min-width: 66em) 33vw,
                                         (min-width: 44em) 50vw,
                                                         100vw"
@@ -28,3 +34,5 @@ export const FigureBox: React.FC<FigurBoxProps> = ({ imageBoxes, loading }) => {
         </>
     );
 };
+
+export default FigureBox
