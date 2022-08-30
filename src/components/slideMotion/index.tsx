@@ -37,7 +37,6 @@ function SlideMotion() {
         if (status === "succeeded") {
             [...slideshow.current.querySelectorAll(".slide")].forEach((el, i) => {
                 slides.current = slide(el);
-
             });
         }
     }, [params.id, status]);
@@ -89,7 +88,7 @@ function SlideMotion() {
 
     return (
         <>
-            {status === "succeeded" && (
+            {status !== "succeeded" ? (<div className="loading" />) : (
                 <main>
                     <Header navigate={navigation} isContentOpen={isContentOpen} />
                     <div className="slideshow" ref={slideshow}>
