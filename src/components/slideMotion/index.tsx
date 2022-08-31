@@ -22,7 +22,6 @@ import { getRandom } from "../../utils/index";
 import { DomContext } from "../../context/domContext";
 import "../../app.scss";
 
-
 function SlideMotion() {
     const dispatch = useAppDispatch();
     const params = useParams();
@@ -30,7 +29,7 @@ function SlideMotion() {
     const slideshow: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const slides: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const root: React.MutableRefObject<HTMLDivElement | any> = useRef();
-    const dirct: React.MutableRefObject<string> = useRef('right');
+    const dirct: React.MutableRefObject<string> = useRef("right");
     const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
     const [layout, setLayout] = useState(getRandom(5));
     const { status, clone } = useAppSelector((state) => state.photoSlice);
@@ -49,7 +48,6 @@ function SlideMotion() {
         }
     }, [dispatch, status]);
 
-
     const completedAnimationContent = (action: string) => {
         if (action === "hide") {
             setIsContentOpen(false);
@@ -64,11 +62,10 @@ function SlideMotion() {
     };
     const getDispatch = (index: number, dir: string) => {
         dispatch(fetchPhotos({ page: index }));
-
     };
 
     const navigation = useCallback((dir: string, index: number) => {
-        dirct.current = dir
+        dirct.current = dir;
         currentSlide(slides.current, dir, getDispatch, index);
     }, []);
 
@@ -81,45 +78,42 @@ function SlideMotion() {
 
     return (
         <>
-            {status === "pending" || status === "idle" ? (
-                <div className="loading" />
-            ) : (
-
-                <main>
-                    <Header navigate={navigation} isContentOpen={isContentOpen} />
-                    <div className="slideshow" ref={slideshow}>
-                        <div
-                            className={`slide slide--layout-${layout}`}
-                            data-contentcolor={clone.dataContentcolor}
-                            ref={root}
-                        >
-
-                            <FigureMain
-                                url={clone.main.url}
-                                dataSort={clone.main.dataSort}
-                                loading={status}
-                            />
-                            <FigureBox imageBoxes={clone.imageBoxes} loading={status} />
-
-
-                            <SlideTitle
-                                slideTitle={clone.slideTitle}
-                                textMeta={clone.textMeta}
-                                textDescription={clone.textDescription}
-                                showContent={handleContent}
-                            />
-                            <Content
-                                p1={clone.content.p1}
-                                p2={clone.content.p2}
-                                p3={clone.content.p3}
-                                hideContent={handleContent}
-                            />
-                        </div>
+            <main>
+                <Header navigate={navigation} isContentOpen={isContentOpen} />
+                <div className="slideshow" ref={slideshow}>
+                    <div
+                        className={`slide slide--layout-${layout}`}
+                        data-contentcolor={clone.dataContentcolor}
+                        ref={root}
+                    >
+                        {status === "pending" || status === "idle" ? (
+                            <div className="loading" />
+                        ) : (
+                            <>
+                                <FigureMain
+                                    url={clone.main.url}
+                                    dataSort={clone.main.dataSort}
+                                    loading={status}
+                                />
+                                <FigureBox imageBoxes={clone.imageBoxes} loading={status} />
+                                <SlideTitle
+                                    slideTitle={clone.slideTitle}
+                                    textMeta={clone.textMeta}
+                                    textDescription={clone.textDescription}
+                                    showContent={handleContent}
+                                />
+                                <Content
+                                    p1={clone.content.p1}
+                                    p2={clone.content.p2}
+                                    p3={clone.content.p3}
+                                    hideContent={handleContent}
+                                />
+                            </>
+                        )}
                     </div>
-
-                    <CursorFx />
-                </main>
-            )}
+                </div>
+                <CursorFx />
+            </main>
         </>
     );
 }
