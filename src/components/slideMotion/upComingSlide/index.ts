@@ -40,7 +40,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
       },
       "begin+=" +
         Number(
-          animationSettings.staggerFactor * (10 - 1) +
+          animationSettings.staggerFactor * (11 - 1) +
             pos * animationSettings.staggerFactor
         )
     ).to(
@@ -52,7 +52,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
       },
       "begin+=" +
         Number(
-          animationSettings.staggerFactor * (10 - 1) +
+          animationSettings.staggerFactor * (11 - 1) +
             pos * animationSettings.staggerFactor
         )
     );
@@ -65,7 +65,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
       ease: "easeOut",
       opacity: 1,
     },
-    "begin+=" + animationSettings.staggerFactor * (10 - 1)
+    "begin+=" + animationSettings.staggerFactor * (11 - 1)
   );
 
   tl.to(
@@ -76,7 +76,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
       ease: "easeOut",
       opacity: 1,
     },
-    "begin+=" + animationSettings.staggerFactor * (5 - 1)
+    "begin+=" + animationSettings.staggerFactor * (10 - 1)
   );
   [...currentSlide.DOM.innerTitle]
     .filter((_, pos) => pos < currentSlide.innerTitleTotal - 1)
