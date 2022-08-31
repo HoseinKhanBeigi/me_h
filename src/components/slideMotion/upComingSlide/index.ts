@@ -2,12 +2,20 @@ import { gsap } from "gsap";
 import { timeLine } from "../gsap/timeLine";
 import { animationSettings, sortedslide, shuffleArray } from "../../../utils";
 
-export const upComingSlide = (currentSlide: any, dir: string) => {
+export const upComingSlide = (
+  currentSlide: any,
+  dir: string,
+  // onStart: () => void,
+  onCompleted: () => void
+) => {
   const start = () => {
     currentSlide.DOM.el.style.zIndex = 101;
+    // onStart();
   };
 
-  const complete = () => {};
+  const complete = () => {
+    onCompleted();
+  };
 
   const tl: any = timeLine({ start, complete });
 

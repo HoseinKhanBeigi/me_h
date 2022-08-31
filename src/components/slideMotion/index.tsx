@@ -5,6 +5,7 @@ import React, {
     useContext,
     useLayoutEffect,
     useCallback,
+    Suspense,
 } from "react";
 import { CursorFx } from "./mouseCursor";
 import { currentSlide } from "./currentSlide";
@@ -19,6 +20,9 @@ import { useAppSelector, useAppDispatch } from "../../hooks/useDispatch";
 import { fetchPhotos } from "../../features/actions";
 import { useParams } from "react-router-dom";
 import { DomContext } from "../../context/domContext";
+import LinearProgress from "@mui/material/LinearProgress";
+import { createStyles, makeStyles } from "@material-ui/core";
+
 import "../../app.scss";
 
 function SlideMotion() {
@@ -31,7 +35,8 @@ function SlideMotion() {
     const dirct: React.MutableRefObject<string> = useRef("right");
     const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
     const { status, clone } = useAppSelector((state) => state.photoSlice);
-
+    const motionComplete: React.MutableRefObject<string> = useRef(status)
+    const [progress, setProgress] = React.useState(0);
     useLayoutEffect(() => {
         if (status === "succeeded") {
             [...slideshow.current.querySelectorAll(".slide")].forEach((el, i) => {
@@ -63,51 +68,72 @@ function SlideMotion() {
     };
 
     const navigation = useCallback((dir: string, index: number) => {
+        motionComplete.current = "idle";
         dirct.current = dir;
+        setProgress(0)
         currentSlide(slides.current, dir, getDispatch, index);
     }, []);
 
+    const onCompleted = () => {
+        setProgress(0)
+        motionComplete.current = "finished";
+    }
+
     useLayoutEffect(() => {
         if (status === "succeeded") {
-            upComingSlide(slides.current, dirct.current);
+            setProgress(100);
+            upComingSlide(slides.current, dirct.current, onCompleted);
         }
     }, [status]);
 
+
+    React.useEffect(() => {
+        const timer = setInterval(() => {
+            setProgress((oldProgress) => {
+                const diff = Math.random() * 30;
+                return Math.min(oldProgress + diff, 100);
+            });
+        }, 500);
+
+        return () => {
+            clearInterval(timer);
+        };
+    }, []);
+
     return (
-        <>
-            <main>
-                <Header navigate={navigation} isContentOpen={isContentOpen} />
-                <div className="slideshow" ref={slideshow}>
+        <main>
+            {motionComplete.current !== "finished" && (
+                <LinearProgress variant="determinate" value={progress} />
+            )}
+            <Header navigate={navigation} isContentOpen={isContentOpen} />
+            <div className="slideshow" ref={slideshow}>
+                {status === "succeeded" && (
                     <div
                         className={`slide slide--layout-${clone.layout}`}
                         data-contentcolor={clone.dataContentcolor}
                         ref={root}
                     >
-                        {status !== "succeeded" ? (
-                            <div className="loading" />
-                        ) : (
-                            <>
-                                <FigureMain url={clone} dataSort={clone} loading={status} />
-                                <FigureBox imageBoxes={clone.imageBoxes} loading={status} />
-                                <SlideTitle
-                                    slideTitle={clone.slideTitle}
-                                    textMeta={clone.textMeta}
-                                    textDescription={clone.textDescription}
-                                    showContent={handleContent}
-                                />
-                                <Content
-                                    p1={clone}
-                                    p2={clone}
-                                    p3={clone}
-                                    hideContent={handleContent}
-                                />
-                            </>
-                        )}
+                        <>
+                            <FigureMain url={clone} dataSort={clone} loading={status} />
+                            <FigureBox imageBoxes={clone.imageBoxes} loading={status} />
+                            <SlideTitle
+                                slideTitle={clone.slideTitle}
+                                textMeta={clone.textMeta}
+                                textDescription={clone.textDescription}
+                                showContent={handleContent}
+                            />
+                            <Content
+                                p1={clone}
+                                p2={clone}
+                                p3={clone}
+                                hideContent={handleContent}
+                            />
+                        </>
                     </div>
-                </div>
-                <CursorFx />
-            </main>
-        </>
+                )}
+            </div>
+            <CursorFx />
+        </main>
     );
 }
 
