@@ -18,7 +18,6 @@ import { SlideTitle } from "./SlideTitle";
 import { useAppSelector, useAppDispatch } from "../../hooks/useDispatch";
 import { fetchPhotos } from "../../features/actions";
 import { useParams } from "react-router-dom";
-import { getRandom } from "../../utils/index";
 import { DomContext } from "../../context/domContext";
 import "../../app.scss";
 
@@ -31,7 +30,6 @@ function SlideMotion() {
     const root: React.MutableRefObject<HTMLDivElement | any> = useRef();
     const dirct: React.MutableRefObject<string> = useRef("right");
     const [isContentOpen, setIsContentOpen] = useState<boolean>(false);
-    const [layout, setLayout] = useState(getRandom(5));
     const { status, clone } = useAppSelector((state) => state.photoSlice);
 
     useLayoutEffect(() => {
@@ -72,7 +70,6 @@ function SlideMotion() {
     useLayoutEffect(() => {
         if (status === "succeeded") {
             upComingSlide(slides.current, dirct.current);
-            setLayout(getRandom(5));
         }
     }, [status]);
 
@@ -82,19 +79,15 @@ function SlideMotion() {
                 <Header navigate={navigation} isContentOpen={isContentOpen} />
                 <div className="slideshow" ref={slideshow}>
                     <div
-                        className={`slide slide--layout-${layout}`}
+                        className={`slide slide--layout-${clone.layout}`}
                         data-contentcolor={clone.dataContentcolor}
                         ref={root}
                     >
-                        {status === "pending" || status === "idle" ? (
+                        {status !== "succeeded" ? (
                             <div className="loading" />
                         ) : (
                             <>
-                                <FigureMain
-                                    url={clone.main.url}
-                                    dataSort={clone.main.dataSort}
-                                    loading={status}
-                                />
+                                <FigureMain url={clone} dataSort={clone} loading={status} />
                                 <FigureBox imageBoxes={clone.imageBoxes} loading={status} />
                                 <SlideTitle
                                     slideTitle={clone.slideTitle}
@@ -103,9 +96,9 @@ function SlideMotion() {
                                     showContent={handleContent}
                                 />
                                 <Content
-                                    p1={clone.content.p1}
-                                    p2={clone.content.p2}
-                                    p3={clone.content.p3}
+                                    p1={clone}
+                                    p2={clone}
+                                    p3={clone}
                                     hideContent={handleContent}
                                 />
                             </>

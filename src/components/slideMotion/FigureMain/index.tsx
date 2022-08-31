@@ -3,7 +3,6 @@ import clsx from "clsx";
 import { FigureMainProps } from "../../../types";
 import { useTileFx } from "../../../hooks/useTileFx";
 
-
 const FigureMain: React.FC<FigureMainProps> = ({
     dataSort,
     url,
@@ -14,20 +13,21 @@ const FigureMain: React.FC<FigureMainProps> = ({
     const handleOnLoad = () => {
         setIsLoaded(false)
     }
-    const arr: any = Array(4).keys()
+    const arr: any = Array(4).keys();
 
     return (
         <>
-            <div className="slide__figure slide__figure--main" data-sort={dataSort}>
+
+            <div className="slide__figure slide__figure--main" data-sort={dataSort.main.dataSort}>
                 <div className="slide__figure-inner" ref={root.figure}>
                     {[...arr].map((_: number, index: number) => {
                         return <img
                             key={index}
                             className={clsx("slide__figure-img", {
-                                filterImg: isLoaded,
+                                filterImg: isLoaded || loading !== "succeeded",
                             })}
                             onLoad={handleOnLoad}
-                            src={url}
+                            src={url.main.url}
                             alt="A description of the image."
                             width="690"
                             height="100%"

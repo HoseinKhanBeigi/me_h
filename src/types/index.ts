@@ -88,9 +88,9 @@ export interface HeaderInterface {
 
 export interface ContentProps {
   hideContent: (val: string) => void;
-  p1: string;
-  p2: string;
-  p3: string;
+  p1: any;
+  p2: any;
+  p3: any;
 }
 
 export interface Times {

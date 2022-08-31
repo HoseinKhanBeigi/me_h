@@ -26,7 +26,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
       }
     });
   };
-  tl.add(onStartUpcoming, animationSettings.staggerFactor * (2 - 1));
+  tl.add(onStartUpcoming);
 
   const upcomingSlideFigures = sortedslide(currentSlide.figures, dir, "right");
   upcomingSlideFigures.forEach((figure: any, pos: any) => {
@@ -40,7 +40,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
       },
       "begin+=" +
         Number(
-          animationSettings.staggerFactor * (3 - 1) +
+          animationSettings.staggerFactor +
             pos * animationSettings.staggerFactor
         )
     ).to(
@@ -52,7 +52,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
       },
       "begin+=" +
         Number(
-          animationSettings.staggerFactor * (3 - 1) +
+          animationSettings.staggerFactor +
             pos * animationSettings.staggerFactor
         )
     );
@@ -65,7 +65,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
       ease: "easeOut",
       opacity: 1,
     },
-    "begin+=" + animationSettings.staggerFactor * (4 - 1)
+    "begin+=" + animationSettings.staggerFactor
   );
 
   tl.to(
@@ -76,7 +76,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
       ease: "easeOut",
       opacity: 1,
     },
-    "begin+=" + animationSettings.staggerFactor * (2 - 1)
+    "begin+=" + animationSettings.staggerFactor
   );
   [...currentSlide.DOM.innerTitle]
     .filter((_, pos) => pos < currentSlide.innerTitleTotal - 1)
@@ -92,7 +92,7 @@ export const upComingSlide = (currentSlide: any, dir: string) => {
           Number(
             0.05 +
               0.04 * (currentSlide.titleLettersTotal - 1) +
-              animationSettings.staggerFactor * (4 - 1)
+              animationSettings.staggerFactor * 1
           )
       );
     });

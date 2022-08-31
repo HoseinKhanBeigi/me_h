@@ -16,7 +16,7 @@ const FigureBox: React.FC<FigurBoxProps> = ({ imageBoxes, loading }) => {
                 >
                     <img
                         className={clsx("slide__figure-img", {
-                            filterImg: isLoaded,
+                            filterImg: isLoaded || loading !== "succeeded",
                         })}
                         src={item.url}
                         alt="A description of the image."
