@@ -5,7 +5,6 @@ import React, {
     useContext,
     useLayoutEffect,
     useCallback,
-    Suspense,
 } from "react";
 import { CursorFx } from "./mouseCursor";
 import { currentSlide } from "./currentSlide";
@@ -21,8 +20,6 @@ import { fetchPhotos } from "../../features/actions";
 import { useParams } from "react-router-dom";
 import { DomContext } from "../../context/domContext";
 import LinearProgress from "@mui/material/LinearProgress";
-import { createStyles, makeStyles } from "@material-ui/core";
-
 import "../../app.scss";
 
 function SlideMotion() {
