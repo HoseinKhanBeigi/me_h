@@ -15,7 +15,7 @@ export const lerp = (a: any, b: any, n: any) => {
 export const shuffleArray = (arr: any) => arr.sort(() => Math.random() - 0.5);
 
 export const animationSettings = {
-  duration: 0.8,
+  duration: 1,
   staggerFactor: 0.13,
 };
 
