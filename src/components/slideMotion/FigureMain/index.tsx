@@ -14,6 +14,9 @@ const FigureMain: React.FC<FigureMainProps> = ({ dataSort, url }) => {
         return url.main.url;
     }, []);
 
+    console.log(srcUlr);
+
+
     const arr: Array<number> = Array(4);
     return (
         <>
@@ -22,7 +25,7 @@ const FigureMain: React.FC<FigureMainProps> = ({ dataSort, url }) => {
                 data-sort={dataSort.main.dataSort}
             >
                 <div className="slide__figure-inner" ref={root.figure}>
-                    {[...arr].map((_: number, index: number) => {
+                    {[1, 2, 3, 4].map((_: number, index: number) => {
                         return (
                             <img
                                 key={index}
