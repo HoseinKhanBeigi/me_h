@@ -12,12 +12,10 @@ const FigureMain: React.FC<FigureMainProps> = ({ dataSort, url }) => {
 
     const srcUlr = useMemo(() => {
         return url.main.url;
-    }, []);
-
-    console.log(srcUlr);
+    }, [url.main.url]);
 
 
-    const arr: Array<number> = Array(4);
+
     return (
         <>
             <div
