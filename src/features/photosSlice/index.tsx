@@ -36,7 +36,7 @@ const photosSlice = createSlice({
                     layout: getRandom(5),
                     dataContentcolor: "#e4d0a2",
                     main: {
-                        url: state.entities[getRandom(8)].urls.regular,
+                        url: state.entities[5].urls.regular,
                         dataSort: "3",
                     },
                     slideTitle: "Mhopsis",
