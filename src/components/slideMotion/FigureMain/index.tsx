@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, memo } from "react";
 import clsx from "clsx";
 import { FigureMainProps } from "../../../types";
 import { useTileFx } from "../../../hooks/useTileFx";
@@ -46,4 +46,4 @@ const FigureMain: React.FC<FigureMainProps> = ({ dataSort, url }) => {
     );
 };
 
-export default FigureMain;
+export default memo(FigureMain);
