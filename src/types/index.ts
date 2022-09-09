@@ -78,7 +78,6 @@ export interface FigurBoxProps {
 export interface FigureMainProps {
   dataSort: any;
   url: any;
-  loading: string;
 }
 
 export interface HeaderInterface {

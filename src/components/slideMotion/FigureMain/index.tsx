@@ -18,7 +18,7 @@ const FigureMain: React.FC<FigureMainProps> = ({ dataSort, url }) => {
         <>
             <div
                 className="slide__figure slide__figure--main"
-                data-sort={dataSort.main.dataSort}
+                data-sort={dataSort}
             >
                 <div className="slide__figure-inner" ref={root.figure}>
                     {[1, 2, 3, 4].map((_: number, index: number) => {

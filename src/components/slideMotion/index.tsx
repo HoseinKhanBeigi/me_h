@@ -41,7 +41,6 @@ function SlideMotion() {
             [...slideshow.current.querySelectorAll(".slide")].forEach((el, i) => {
                 slides.current = slide(el);
             });
-
         }
     }, [params.id, status]);
 
@@ -114,7 +113,7 @@ function SlideMotion() {
                         ref={root}
                     >
                         <>
-                            <FigureMain url={clone} dataSort={clone} loading={status} />
+                            <FigureMain url={clone} dataSort={clone} />
                             <FigureBox imageBoxes={clone.imageBoxes} loading={status} />
                             <SlideTitle
                                 slideTitle={clone.slideTitle}
