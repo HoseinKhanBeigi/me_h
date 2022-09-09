@@ -16,6 +16,7 @@ import { Content } from "./content";
 import { Header } from "./header";
 import { SlideTitle } from "./SlideTitle";
 import { useAppSelector, useAppDispatch } from "../../hooks/useDispatch";
+import { usePreLoadImg } from "../../hooks/usePreloadImg"
 import { fetchPhotos } from "../../features/actions";
 import { useParams } from "react-router-dom";
 import { DomContext } from "../../context/domContext";
@@ -34,11 +35,13 @@ function SlideMotion() {
     const { status, clone } = useAppSelector((state) => state.photoSlice);
     const motionComplete: React.MutableRefObject<string> = useRef(status)
     const [progress, setProgress] = React.useState(0);
+
     useLayoutEffect(() => {
         if (status === "succeeded") {
             [...slideshow.current.querySelectorAll(".slide")].forEach((el, i) => {
                 slides.current = slide(el);
             });
+
         }
     }, [params.id, status]);
 

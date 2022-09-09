@@ -1,3 +1,3 @@
 import { createAsyncAction } from "../../services/action";
 
-export const fetchPhotos = createAsyncAction("/photos");
+export const fetchPhotos = createAsyncAction("/photos", "photos");

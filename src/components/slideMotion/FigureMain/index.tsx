@@ -14,8 +14,6 @@ const FigureMain: React.FC<FigureMainProps> = ({ dataSort, url }) => {
         return url.main.url;
     }, [url.main.url]);
 
-
-
     return (
         <>
             <div
