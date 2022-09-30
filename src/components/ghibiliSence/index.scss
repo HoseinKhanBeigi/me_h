@@ -1,0 +1,80 @@
+.ghibliScene {
+  .castle-container {
+    position: absolute;
+    top: 70%;
+    left: 100%;
+    transform: scale(0.5);
+
+    @media screen and (max-width: 568px) {
+      transform: scale(0.3);
+    }
+  }
+
+  .sky {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    .c1 {
+      position: absolute;
+      transform-origin: left bottom;
+      bottom: 0;
+      left: 0;
+      width: 45vw;
+      height: 50vh;
+      background: url("../../../public/assets/img/cloud1.png") no-repeat 0
+        bottom;
+      background-size: contain;
+    }
+
+    .c2 {
+      position: absolute;
+      transform-origin: right bottom;
+      bottom: 0;
+      right: 0;
+      width: 60vw;
+      height: 60vh;
+      background: url("../../../public/assets/img/cloud2.png") no-repeat right
+        bottom;
+      background-size: contain;
+    }
+
+    @media screen and (max-width: 768px) {
+      .c1,
+      .c2 {
+        width: 100vw;
+        height: 90vh;
+        background-size: 100% auto;
+      }
+    }
+  }
+
+  .grass1 {
+    transform-origin: left bottom;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50vw;
+    height: 25vh;
+    transform: scale(1.2);
+    background: url("../../../public/assets/img/grass1.png") no-repeat 0 bottom;
+    background-size: contain;
+    filter: blur(2px);
+  }
+
+  .grass2 {
+    transform-origin: right bottom;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40vw;
+    height: 20vh;
+    transform: scale(1.2);
+    background: url("../../../public/assets/img/grass2.png") no-repeat right
+      bottom;
+    background-size: contain;
+    filter: blur(2px);
+  }
+}
