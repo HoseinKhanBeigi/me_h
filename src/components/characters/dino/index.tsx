@@ -13,7 +13,10 @@ const SONGS = [
     // Future Islands - Seasons
     'https://open.spotify.com/track/2oPoWNzWrFonvqrkZtmX52?si=jgc8oNB_Qdqx1vnU0gKnLA',
 ]
-export const Dino = () => {
+interface Props {
+    isPlaying: boolean
+}
+export const Dino: React.FC<Props> = ({ isPlaying }) => {
     const loop = gsap.timeline();
     const rhythm = 0.3;
     const song = random(1, 4);

@@ -2,7 +2,11 @@ import { ShapesSVG } from "./shapesSVG"
 import { LOOP_EASE_IN_OUT } from '../../../constants'
 import { useEffect } from "react"
 import gsap from "gsap"
-export const Shapes = () => {
+
+interface Props {
+    isPlaying: boolean
+}
+export const Shapes: React.FC<Props> = ({ isPlaying }) => {
     const loop = gsap.timeline()
     const init = () => {
         const smart = document.querySelector('.smart-smart')

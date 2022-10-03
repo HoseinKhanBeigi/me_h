@@ -4,7 +4,11 @@ import gsap from "gsap"
 import { useEffect } from 'react';
 import { ShrimpSVG } from './shrimpSVG'
 
-export const Shrimp = () => {
+interface Props {
+    isPlaying: boolean;
+}
+
+export const Shrimp: React.FC<Props> = ({ isPlaying }) => {
     const loop = gsap.timeline()
     const init = () => {
         const body = document.querySelector('.filomena-filomena')

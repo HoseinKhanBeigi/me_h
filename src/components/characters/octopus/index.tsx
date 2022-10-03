@@ -3,7 +3,11 @@ import gsap from "gsap"
 import { random } from '../../../utils'
 import { LOOP, LOOP_EASE_IN_OUT } from '../../../constants'
 import { useEffect } from "react"
-export const Octopus = () => {
+
+interface Props {
+    isPlaying: boolean
+}
+export const Octopus: React.FC<Props> = ({ isPlaying }) => {
     const loop = gsap.timeline()
     const init = () => {
         const body = document.querySelector('.octo-octo')

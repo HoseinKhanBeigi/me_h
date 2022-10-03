@@ -102,3 +102,21 @@ export function getNodes(parentSelector: any) {
 
   return el;
 }
+
+export function removeBodyClass(...classes: any) {
+  document.body.classList.remove(...classes);
+}
+
+export function addBodyClass(...classes: any) {
+  console.log(...classes);
+
+  document.body.classList.add(...classes);
+}
+
+export function isReverse(e: any) {
+  return e.scrollDirection === "REVERSE";
+}
+
+export function isForward(e: any) {
+  return e.scrollDirection === "FORWARD";
+}

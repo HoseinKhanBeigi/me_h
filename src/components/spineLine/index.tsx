@@ -12,12 +12,13 @@ export const SpineLine: React.FC<Props> = ({ isPlaying }) => {
             .addLabel('enter', 0)
             .fromTo(
                 '.spine',
-                1,
                 {
+                    duration: 1,
                     autoAlpha: 0,
                     yPercent: 20,
                 },
                 {
+                    duration: 1,
                     autoAlpha: 1,
                     yPercent: 0,
                     ease: Power3.easeOut,
@@ -26,12 +27,13 @@ export const SpineLine: React.FC<Props> = ({ isPlaying }) => {
             )
             .fromTo(
                 '.spine-target .circle',
-                1,
                 {
+                    duration: 1,
                     scale: 0,
                     autoAlpha: 0,
                 },
                 {
+                    duration: 1,
                     scale: 1,
                     autoAlpha: 1,
                     ease: Elastic.easeOut.config(1, 0.5),
@@ -40,19 +42,20 @@ export const SpineLine: React.FC<Props> = ({ isPlaying }) => {
             )
             .fromTo(
                 '.spine-target .circle',
-                2,
                 {
+                    duration: 2,
                     backgroundColor: 'transparent',
                 },
                 {
+                    duration: 2,
                     backgroundColor: '#5918df',
                 },
                 'enter+=1.2'
             )
             .fromTo(
                 '.spine-target .pulse',
-                4,
                 {
+                    duration: 4,
                     autoAlpha: 1,
                     scale: 0,
                 },
@@ -70,8 +73,8 @@ export const SpineLine: React.FC<Props> = ({ isPlaying }) => {
             .addLabel('leave', 0)
             .to(
                 '.spine-target .circle, .spine-target .pulse',
-                0.5,
                 {
+                    duration: 0.5,
                     scale: 0,
                     autoAlpha: 0,
                     ease: Power3.easeIn,
@@ -80,8 +83,8 @@ export const SpineLine: React.FC<Props> = ({ isPlaying }) => {
             )
             .to(
                 '.spine',
-                0.5,
                 {
+                    duration: 0.5,
                     autoAlpha: 0,
                     yPercent: 50,
                     ease: Power3.easeIn,

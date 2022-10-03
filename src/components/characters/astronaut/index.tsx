@@ -3,7 +3,10 @@ import { random } from '../../../utils'
 import { LOOP_ELASTIC_OUT, LOOP_EASE_IN_OUT } from '../../../constants'
 import gsap from "gsap"
 import { useEffect } from "react"
-export const Astronaut = () => {
+interface Props {
+    isPlaying: boolean
+}
+export const Astronaut: React.FC<Props> = ({ isPlaying }) => {
     const loop = gsap.timeline();
     const init = () => {
         const astroHead = document.querySelector(".astro-head");

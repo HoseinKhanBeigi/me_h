@@ -6,14 +6,18 @@ import {
     LOOP_EASE_OUT,
     LOOP_ELASTIC_OUT,
 } from "../../../constants";
-export const ABiz = () => {
-    const loop = gsap.timeline();
+interface Props {
+    isPlaying: boolean;
+}
+export const ABiz: React.FC<Props> = ({ isPlaying }) => {
+
     const svg: React.MutableRefObject<any> = useRef(null);
     const init = () => {
+        const loop = gsap.timeline();
         loop
             .addLabel("start", 0)
             .to(
-                ".abiz-head",
+                '.abiz-head',
                 {
                     duration: 2,
                     transformOrigin: "50% 75%",
@@ -51,7 +55,6 @@ export const ABiz = () => {
     };
 
     useEffect(() => {
-        svg.current = document.querySelector("svg");
         init()
     }, []);
     return (

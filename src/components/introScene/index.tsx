@@ -1,4 +1,5 @@
 import { TextBlock } from "../textBlock"
+
 export const IntroScene = () => {
     return (
         <section className="scene-intro" id="intro">

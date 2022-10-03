@@ -14,13 +14,15 @@ export default function App() {
     }
   }, [])
   return (
-    <>
+    <div className="app">
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
       </Routes>
       <SpineLine isPlaying={true} />
       <div className="tweenerElement"></div>
-    </>
+
+    </div>
   );
 }

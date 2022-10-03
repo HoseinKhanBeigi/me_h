@@ -8,9 +8,7 @@ interface Prop {
 export const SceneSection: React.FC<Prop> = ({ children, _id }) => {
     return (
         <section className="scene" id={_id}>
-            <div className="static-container">
-                {children}
-            </div>
+            {children}
         </section>
     )
 }

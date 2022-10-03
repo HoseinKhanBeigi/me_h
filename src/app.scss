@@ -48,7 +48,7 @@ body {
   }
 }
 
-#app {
+.app {
   overflow: hidden;
   margin: 0 auto;
 }
@@ -99,7 +99,7 @@ body {
   transition: background-color 0.4s ease-out;
 
   &.blue-background {
-    background: var(blue-background);
+    background: var(--blue-background);
 
     .header-nav-button .dots {
       background: var(--black);

@@ -4,6 +4,7 @@ import { LOOP_EASE_IN_OUT, LOOP } from "../../../constants";
 import { getNodes } from "../../../utils";
 import { useResizeWindowRef } from "../../../hooks/useResize";
 import { useEffect } from "react";
+import './index.scss'
 export const HolwsCastle = () => {
     const loop = gsap.timeline();
     const windowSizeref = useResizeWindowRef();

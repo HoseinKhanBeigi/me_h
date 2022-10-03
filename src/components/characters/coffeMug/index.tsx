@@ -4,7 +4,11 @@ import { LOOP_EASE_IN_OUT } from '../../../constants'
 import gsap from "gsap"
 import { useEffect } from 'react';
 
-export const CoffeeMug = () => {
+interface Props {
+    isPlaying: boolean
+}
+
+export const CoffeeMug: React.FC<Props> = ({ isPlaying }) => {
     const loop = gsap.timeline()
     const init = () => {
         loop.to('.coffee-coffee', {

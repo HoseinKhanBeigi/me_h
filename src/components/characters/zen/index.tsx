@@ -2,7 +2,11 @@ import { ZenSVG } from "./zenSVG"
 import { LOOP_EASE_IN_OUT } from '../../../constants'
 import gsap from "gsap"
 import { useEffect } from "react"
-export const Zen = () => {
+
+interface Props {
+    isPlaying: boolean
+}
+export const Zen: React.FC<Props> = ({ isPlaying }) => {
     const loop = gsap.timeline()
     const init = () => {
         const body = document.querySelector('.zen-zen')

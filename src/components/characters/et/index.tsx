@@ -4,7 +4,11 @@ import { LOOP, LOOP_EASE_IN_OUT } from '../../../constants'
 import { useEffect } from "react"
 import { ETSVG } from "./eTSVG"
 
-export const ET = () => {
+interface Props {
+    isPlaying: boolean
+}
+
+export const ET: React.FC<Props> = ({ isPlaying }) => {
     const loop = gsap.timeline()
     const init = () => {
         const body = document.querySelector('.et-et')
