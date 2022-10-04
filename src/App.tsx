@@ -5,6 +5,7 @@ import { useResizeWindowRef } from "./hooks/useResize"
 import "./app.scss"
 import { useEffect } from "react";
 import { SpineLine } from "./components/spineLine";
+import { Header } from "./components/header";
 
 export default function App() {
   const windowSizeref = useResizeWindowRef();
@@ -15,7 +16,7 @@ export default function App() {
   }, [])
   return (
     <div className="app">
-
+      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
