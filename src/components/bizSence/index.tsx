@@ -22,28 +22,71 @@ export const BizScene: React.FC<Props> = ({ isPlaying }) => {
     return (
         <div className="bizScene">
             <TitleSection scene="bizTitle">
-                <TitleFunction params="2011,2019">biz</TitleFunction>
+                <TitleFunction params="(2015,2017)">datis parse</TitleFunction>
+            </TitleSection>
+            <TitleSection scene="bizTitle2">
+                <TitleFunction params="(2017,2019)">round table apps</TitleFunction>
+            </TitleSection>
+            <TitleSection scene="bizTitle3">
+                <TitleFunction params="(2019,2022)">upwork</TitleFunction>
             </TitleSection>
             <SceneSection _id="biz1">
                 <div className="static-container">
                     <TextBlock>
                         <p className="-big">
-                            From 2011 to 2019 I was
-                            <strong className="-purple">Head of Frontend</strong>
+                            From 2015 to 2017 I was
+                            <strong className="-purple">senior Frontend</strong>
                             @
                             <a
-                                href="https://www.bizcommerce.com.br/"
+                                href="https://datispars.com/"
                                 target="_blank"
-                                title="Visit Biz Commerce's website"
+                                title="Visit datispars Commerce's website"
                             >
-                                biz</a
+                                datispars</a
                             >.
                         </p>
                         <p>
-                            A SaaS e-commerce platform focused on simplifying and customizing the
-                            use of Magento.
+                            A SaaS business solution platform focused on simplifying and customizing.
                         </p>
                     </TextBlock>
+
+                </div>
+                <div className="static-container">
+                    <TextBlock>
+                        <p className="-big">
+                            From 2015 to 2019 I was
+                            <strong className="-purple">senior Frontend</strong>
+                            @
+                            <a
+                                href="https://roundtableapps.com/"
+                                target="_blank"
+                                title="Visit round table apps Commerce's website"
+                            >
+                                round table apps</a
+                            >.
+                        </p>
+                        <p>
+                            Round Table Apps is a Sydney-based technology and services company, empowering entities to create next generation digital products to achieve their goals..
+                        </p>
+                    </TextBlock>
+
+                </div>
+                <div className="static-container">
+                    <TextBlock>
+                        <p className="-big">
+                            From 2020 to 2022 I am
+                            <strong className="-purple">freelancer senior Frontend</strong>
+                            @
+                            <a
+                                href="https://upwork.com/"
+                                target="_blank"
+                                title="Visit upwork Commerce's website"
+                            >
+                                upwork</a
+                            >.
+                        </p>
+                    </TextBlock>
+
                 </div>
                 <div className="container">
                     <ABiz isPlaying={isPlaying} />
@@ -57,13 +100,14 @@ export const BizScene: React.FC<Props> = ({ isPlaying }) => {
                     <Shapes isPlaying={isPlaying} />
                 </div>
             </SceneSection>
+
             <SceneSection _id="biz2">
                 <div className="static-container">
                     <TextBlock>
                         <p>
-                            Throughout these years we delivered hundreds of
+                            Throughout these years I delivered tens of
                             <span className="-big -purple">
-                                tools, modules, integrations, and custom projects
+                                projects, modules, integrations, and custom projects
                             </span>
                             for online stores and service prov_iders.
                         </p>
@@ -74,11 +118,9 @@ export const BizScene: React.FC<Props> = ({ isPlaying }) => {
                 <div className="static-container">
                     <TextBlock>
                         <p>
-                            biz currently runs
+                            I am currently working and learing about
                             <span className="-big">
-                                <span className="-purple">+1200 stores</span>, payment & shipping
-                                integrations with
-                                <span className="-purple">thousands of transactions</span> daily.
+                                <span className="-purple">microservice backend</span>, golang & grpc services.
                             </span>
                         </p>
                     </TextBlock>

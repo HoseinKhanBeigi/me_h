@@ -36,6 +36,8 @@ export const Home = () => {
         const scenesElements = {
             myCV: DOM.get("#curriculum.scene"),
             bizTitle: DOM.get("#bizTitle.scene"),
+            bizTitle2: DOM.get("#bizTitle2.scene"),
+            bizTitle3: DOM.get("#bizTitle3.scene"),
             biz1: DOM.get("#biz1.scene"),
             biz2: DOM.get("#biz2.scene"),
             biz3: DOM.get("#biz3.scene"),
@@ -44,7 +46,6 @@ export const Home = () => {
             early2: DOM.get("#early-days2.scene"),
             early3: DOM.get("#early-days3.scene"),
             artPhiGamesTitle: DOM.get("#ArtPhiGamesTitle.scene"),
-            // mario: DOM.get("#Mario.scene"),
             ghibli: DOM.get("#Ghibli.scene"),
             ghibli2: DOM.get("#Ghibli2.scene"),
             ghibli3: DOM.get("#Ghibli3.scene"),
@@ -62,13 +63,10 @@ export const Home = () => {
                     trigger: element,
                     start: "top center",
                     onUpdate: (self) => {
-                        self.progress.toFixed(2)
-
+                        self.progress.toFixed(3)
                     },
-                    // makes the height of the scrolling (while pinning) match the width, thus the speed remains constant (vertical/horizontal)
                     end: () => "+=" + element.offsetHeight / 2,
                     scrub: true,
-                    // pin: true,
                     anticipatePin: 1,
 
                 },
@@ -195,6 +193,108 @@ export const Home = () => {
                 },
                 'start+=2'
             )
+    };
+    const sceneBizTitle2 = () => {
+        timelines.bizTitle2
+            .set('#filomena', {
+                autoAlpha: 0,
+                scale: 0,
+                xPercent: 600,
+                yPercent: 100,
+            })
+            .set('#dino', {
+                scale: 0,
+                xPercent: 400,
+                yPercent: 100,
+            })
+            .set('#astro, #coffee, #et, #octo', {
+                autoAlpha: 0,
+                scale: 0,
+                xPercent: 400,
+                yPercent: 100,
+            })
+            .set('#bizTitle2 .title-container, #biz1 .container', { autoAlpha: 1 })
+            .addLabel('start', 0)
+            .from(
+                '#bizTitle2 .title',
+                {
+                    duration: 6,
+                    yPercent: -50,
+                    autoAlpha: 0,
+                    rotationX: 90,
+                    transformOrigin: '50% 50% -100px',
+                    ease: Power3.easeOut,
+                },
+                'start'
+            )
+            .to('#bizTitle2 .title', {
+                duration: 6,
+                autoAlpha: 0,
+                yPercent: -100,
+            })
+            .to(
+                '#smart, #open',
+                {
+                    duration: 6,
+                    autoAlpha: 0,
+                    scale: 0,
+                    ease: Power3.easeOut,
+                    stagger: 0.2,
+                },
+                'start+=2'
+            )
+
+    };
+    const sceneBizTitle3 = () => {
+        timelines.bizTitle3
+            .set('#filomena', {
+                autoAlpha: 0,
+                scale: 0,
+                xPercent: 600,
+                yPercent: 100,
+            })
+            .set('#dino', {
+                scale: 0,
+                xPercent: 400,
+                yPercent: 100,
+            })
+            .set('#astro, #coffee, #et, #octo', {
+                autoAlpha: 0,
+                scale: 0,
+                xPercent: 400,
+                yPercent: 100,
+            })
+            .set('#bizTitle3 .title-container, #biz1 .container', { autoAlpha: 1 })
+            .addLabel('start', 0)
+            .from(
+                '#bizTitle3 .title',
+                {
+                    duration: 6,
+                    yPercent: -50,
+                    autoAlpha: 0,
+                    rotationX: 90,
+                    transformOrigin: '50% 50% -100px',
+                    ease: Power3.easeOut,
+                },
+                'start'
+            )
+            .to('#bizTitle3 .title', {
+                duration: 6,
+                autoAlpha: 0,
+                yPercent: -100,
+            })
+            .to(
+                '#smart, #open',
+                {
+                    duration: 6,
+                    autoAlpha: 0,
+                    scale: 0,
+                    ease: Power3.easeOut,
+                    stagger: 0.2,
+                },
+                'start+=2'
+            )
+
     };
     const sceneBizZen = () => {
         timelines.biz1
@@ -346,22 +446,26 @@ export const Home = () => {
             animation: tweener,
             trigger: '#earlyTitle',
             start: 'top center',
+            onUpdate: (self) => {
+                self.progress.toFixed(5)
+            },
+
             onLeave: () => {
                 gsap.to('#earlyTitle', {
                     duration: 1,
-                    autoAlpha: 0
+                    // autoAlpha: 0
                 });
             },
             onLeaveBack: () => {
                 gsap.to('#earlyTitle', {
                     duration: 1,
-                    autoAlpha: 1
+                    // autoAlpha: 1
                 });
             },
             onEnterBack: () => {
                 gsap.to('#earlyTitle', {
                     duration: 1,
-                    autoAlpha: 1
+                    // autoAlpha: 1
                 });
             },
             scrub: 1,
@@ -642,11 +746,45 @@ export const Home = () => {
             .to('#Ghibli .container', 2, { autoAlpha: 0 }, 'start')
             .from('#wrapperTitle .static-container', 2, { autoAlpha: 1 })
     };
+
+    const sceneArtPhiGames = () => {
+        timelines.artPhiGamesTitle
+            .set('#Mario .container', { autoAlpha: 0 })
+            .addLabel('start', 1)
+            .to('#ArtPhiGamesTitle .title-container', 1, { autoAlpha: 1 })
+            .staggerFrom('#ArtPhiGamesTitle .title .line', 4, {
+                yPercent: -50,
+                autoAlpha: 0,
+                rotationX: 90,
+                transformOrigin: '50% 50% -100px',
+                ease: Power3.easeOut,
+                stagger: 0.5,
+            })
+            .from(
+                '#ArtPhiGamesTitle .std',
+                4,
+                {
+                    yPercent: 50,
+                    autoAlpha: 0,
+                    rotationX: -90,
+                    transformOrigin: '50% 50% 100px',
+                    ease: Power3.easeOut,
+                },
+                '-=1'
+            )
+            .to('#ArtPhiGamesTitle .title, #ArtPhiGamesTitle .std', 3, {
+                yPercent: -100,
+                autoAlpha: 0,
+            })
+            .set('#earlyTitle .title-container', { autoAlpha: 1 })
+    };
     useEffect(() => {
         playIntroScene()
         setupScenes();
         sceneMyCV();
         sceneBizTitle();
+        sceneBizTitle2();
+        sceneBizTitle3();
         sceneBizZen();
         sceneBizEverybody();
         sceneBizEnding();
@@ -654,6 +792,7 @@ export const Home = () => {
         sceneOcean();
         sceneFloatingHead();
         sceneSunset();
+        sceneArtPhiGames();
         sceneGhibli();
         sceneWrapper()
     }, []);

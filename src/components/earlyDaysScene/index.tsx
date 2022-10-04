@@ -16,7 +16,7 @@ export const EarlyDaysScene: React.FC<Prop> = ({ isPlaying }) => {
         <div className="earlyDays">
             <TitleSection scene="earlyTitle">
                 <TitleFunction
-                    params="2008,2011"
+                    params="2012,2014"
                     subtitle={`...`}>
                     earlyDays
                 </TitleFunction>
@@ -42,21 +42,15 @@ export const EarlyDaysScene: React.FC<Prop> = ({ isPlaying }) => {
                 <div className="static-container">
                     <TextBlock>
                         <p className="-big">
-                            <span className="-purple">Freelancing</span> &
-                            <span className="-purple">startuping,</span><br />
-                            <span className="-purple">Inches</span> &
+                            <span className="-purple">freelancing</span> &
+                            <span className="-purple">inches,</span><br />
                             <span className="-purple">pixels.</span>
-                        </p>
-                        <p>
-                            Illustrating album arts, book covers, and billboards as a freelancer.
-                            And designing websites, online magazines, and news portals at my first
-                            web studio.<br />
                         </p>
                     </TextBlock>
                 </div>
             </SceneSection>
             <SceneSection _id="early-days3">
-                <div className="static-container">
+                {/* <div className="static-container">
                     <TextBlock>
                         <p>
                             We've proudly fueled the starring<br />
@@ -68,7 +62,7 @@ export const EarlyDaysScene: React.FC<Prop> = ({ isPlaying }) => {
                             among many others...
                         </p>
                     </TextBlock>
-                </div>
+                </div> */}
             </SceneSection>
         </div>
     )

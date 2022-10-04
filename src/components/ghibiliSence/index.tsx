@@ -2,7 +2,6 @@ import { SceneSection } from "../senceSection"
 import { TextBlock } from "../textBlock"
 import { HolwsCastle } from "../characters/holwsCasle"
 import "./index.scss"
-import { useEffect } from "react"
 
 export const GhibliScene = () => {
     return (
@@ -13,9 +12,9 @@ export const GhibliScene = () => {
                         <p>
                             Before designing for web, I was creating
                             <span className="-big -purple">
-                                3D models, matte painting and advertisements
+                                3D models, and mobile game app.
                             </span>
-                            for many brands, TV commercials, games...
+                            with belender - unity engine
                         </p>
                     </TextBlock>
                 </div>
@@ -37,7 +36,7 @@ export const GhibliScene = () => {
                         <p className="-big">
                             And studying
                             <span className="-purple"
-                            >Philosophy, Japanese animation, fine arts and v_ideo games.</span
+                            >physics, math, English animation, and v_ideo games.</span
                             >
                         </p>
                         <p>
