@@ -818,7 +818,7 @@ export const Home = () => {
                 <TitleFunction subtitle="background.bmp">
                     {["Art", "Philosophy", "Games"].map((el, i) => {
                         return (
-                            <span className="line">
+                            <span className="line" key={i}>
                                 <span className="params">${`{`}</span>
                                 {el}
                                 <span className="params">{`}`}</span>
